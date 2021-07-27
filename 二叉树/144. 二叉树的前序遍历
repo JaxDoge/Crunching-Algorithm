@@ -1,0 +1,64 @@
+144. 二叉树的前序遍历
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+# # 先试试紫金解法
+# # 迭代解法
+# class Solution:
+#     def preorderTraversal(self, root: TreeNode) -> List[int]:
+#         stack = [root]
+#         rst = []
+#         while stack:
+#             i = stack.pop()
+#             if isinstance(i, TreeNode):
+#                 stack.extend([i.right,i.left,i.val])
+#             elif isinstance(i, int):
+#                 rst += [i]
+#         return rst
+
+# # 最直接的递归解法
+# class Solution:
+#     def preorderTraversal(self, root: TreeNode) -> List[int]:
+#         rst = []
+#         if not root:
+#             return rst
+#         rst += [root.val]
+#         rst += self.preorderTraversal(root.left)
+#         rst += self.preorderTraversal(root.right)
+#         return rst
+
+# Morris 解法
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+    	res = []
+    	predecessor = None
+
+    	while root:
+    		if not root.left:  # 没有左子叶，那不用处理别的了，直接打印这个根节点，然后去右子叶，因为引入了 dummy link，所以一定可以去右子树，否则遍历结束
+    			res += [root.val]
+    			root = root.right
+    		else:
+
+    			# Looking for predecessor
+    			# A step towards left
+    			predecessor = root.left
+    			# iteratively stepping to right
+    			while predecessor.right and predecessor.right != root:
+    				predecessor = predecessor.right
+
+    			# If predecessor's right is empty, add dummy link, so the root pointer could back to 
+    			if not predecessor.right:
+    				predecessor.right = root
+    				res += [root.val]
+    				root = root.left
+    				predecessor = None
+    			else:  # Dummy link check, root point does not need to go left since it has been traveled
+    				root = root.right
+    				predecessor = None
+    	return res

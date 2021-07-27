@@ -1,0 +1,89 @@
+102. 二叉树的层序遍历
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+# 迭代解法
+# class Solution:
+#     def levelOrder(self, root: TreeNode) -> List[List[int]]:
+#     	node = root
+#     	res = []
+#     	helper = []
+
+#     	if node:
+#     		helper.append(node)      # Add root node into queue
+
+#     	while helper:   #  pop out the first q_size elements, add the corresponding values into temp list, add child nodes sequently
+#     		q_size = len(helper)
+#     		level_list = []   #  Store the values of outcasts
+#     		print("q_size: ", q_size)
+#     		print("helper: ", helper)
+#     		print("level_list: ", level_list)
+
+#     		for i in range(q_size):  # Deal with first q_size elements
+#     		    # Pop out the element
+#     		    ele = helper.pop(0)    # The big O of pop(0) is n, Fuck!
+#     		    level_list.append(ele.val)
+#     		    if ele.left:
+#     		    	helper.append(ele.left)
+#     		    if ele.right:
+#     		    	helper.append(ele.right)
+#     		res.append(level_list)      # 
+#     	return res
+
+class Solution:
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+    	# from collections import deque
+    	from queue import Queue   # Queue class in python
+    	node = root
+    	res = []
+    	helper = Queue()
+
+    	if node:
+    		helper.put(node)      # Add root node into queue
+
+    	while not helper.empty():   #  pop out the first q_size elements, add the corresponding values into temp list, add child nodes sequently
+    		q_size = helper.qsize()
+    		level_list = []   #  Store the values of outcasts
+
+    		for i in range(q_size):  # Deal with first q_size elements    		    
+    		    ele = helper.get()    # Pop out the element
+    		    level_list.append(ele.val)
+    		    if ele.left:
+    		    	helper.put(ele.left)
+    		    if ele.right:
+    		    	helper.put(ele.right)
+    		res.append(level_list)      # 
+    	return res
+
+
+
+# 递归解法
+
+# class Solution:
+#     def levelOrder(self, root: TreeNode) -> List[List[int]]:
+#     	node = root
+#     	res = []
+
+#     	def iterator(node_p, level):
+#     		if len(res) == level:   # level is the index, so it come from zero; Add new sub-list in terms of level
+#     			res.append([])
+
+#     		res[level].append(node_p.val)
+
+#     		if node_p.left:
+#     			iterator(node_p.left, level+1)
+#     		if node_p.right:
+#     			iterator(node_p.right, level+1)
+
+#     	if not node:
+#     		return res
+
+#     	iterator(node, level = 0)
+#     	return res
+
