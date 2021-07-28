@@ -1,0 +1,34 @@
+107. 二叉树的层序遍历 II
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
+        from collections import deque
+        node = root
+        res = []
+        helper = deque()
+        if node:
+            helper.append(node)
+
+        while helper:
+            sub_level_list = []
+            for i in range(len(helper)):
+                ele = helper.popleft()
+                sub_level_list.append(ele.val)
+                if ele.left:
+                    helper.append(ele.left)
+                if ele.right:
+                    helper.append(ele.right)
+            res.append(sub_level_list)
+        res.reverse()
+        return res
+
+
+
