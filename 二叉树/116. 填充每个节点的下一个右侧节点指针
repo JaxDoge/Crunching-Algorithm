@@ -1,0 +1,40 @@
+116. 填充每个节点的下一个右侧节点指针
+
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val: int = 0, left: 'Node' = None, right: 'Node' = None, next: 'Node' = None):
+        self.val = val
+        self.left = left
+        self.right = right
+        self.next = next
+"""
+
+# # 层序遍历解法
+# class Solution:
+# 	  def connect(self, root: 'Node') -> 'Node':
+# 	  	node = root
+# 	  	if not node:
+# 	  		return root
+
+# 	  	helper = collections.deque([node])
+
+# 	  	while helper:
+# 	  		q_size = len(helper)
+
+# 	  		for i in range(q_size):
+# 	  			ele = helper.popleft()
+# 	  			if i < q_size - 1:
+# 	  				ele.next = helper[0]
+# 	  			if ele.left:
+# 	  				helper.append(ele.left)
+# 	  			if ele.right:
+# 	  				helper.append(ele.right)
+
+# 	  	return root
+
+
+# space complexity O(1) 解法：
+
+
+
