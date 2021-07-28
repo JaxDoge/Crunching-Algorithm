@@ -8,3 +8,17 @@
 #         self.right = right
 class Solution:
     def invertTree(self, root: TreeNode) -> TreeNode:
+        node = root
+
+        def revert_child(node_p):
+            if node_p:
+                node_p.left, node_p.right = node_p.right, node_p.left
+            else:
+                return
+            revert_child(node_p.left)
+            revert_child(node_p.right)
+
+        if not node:
+            return
+        revert_child(node)
+        return node
