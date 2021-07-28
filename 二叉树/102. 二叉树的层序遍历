@@ -47,7 +47,7 @@ class Solution:
     	if node:
     		helper.put(node)      # Add root node into queue
 
-    	while not helper.empty():   #  pop out the first q_size elements, add the corresponding values into temp list, add child nodes sequently
+    	while not helper.empty():   #  pop out the first q_size elements, add the corresponding values into temp list, add child nodes inside helper sequently
     		q_size = helper.qsize()
     		level_list = []   #  Store the values of outcasts
 
