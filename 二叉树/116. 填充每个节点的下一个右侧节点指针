@@ -20,11 +20,12 @@ class Node:
 # 	  	helper = collections.deque([node])
 
 # 	  	while helper:
+#         # Get the loop number for each inner loop 
 # 	  		q_size = len(helper)
 
 # 	  		for i in range(q_size):
 # 	  			ele = helper.popleft()
-# 	  			if i < q_size - 1:
+# 	  			if i < q_size - 1:      # If the node belongs to the current level
 # 	  				ele.next = helper[0]
 # 	  			if ele.left:
 # 	  				helper.append(ele.left)
@@ -35,6 +36,27 @@ class Node:
 
 
 # space complexity O(1) 解法：
+
+# class Solution:
+# 	def connect(self, root: 'Node') -> 'Node':
+# 	  	if not root:
+# 	  		return root
+
+# 	  	leftmost = root
+
+# 	  	while leftmost.left:
+# 	  		node = leftmost
+# 	  		while node:
+# 		  		if not node.left.next:
+# 		  			node.left.next = node.right
+
+# 		  		if node.left.next and node.next:
+# 		  			node.right.next = node.next.left
+# 		  		node = node.next
+
+# 	  		leftmost = leftmost.left
+
+# 	  	return root
 
 
 
