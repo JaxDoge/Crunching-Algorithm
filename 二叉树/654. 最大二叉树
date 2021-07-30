@@ -1,0 +1,28 @@
+654. 最大二叉树
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+# 递归解法
+class Solution:
+    def constructMaximumBinaryTree(self, nums: List[int]) -> TreeNode:
+        # Find the index of max value
+        if not nums:
+            return None
+
+        max_num = float('-inf')
+        ind = None
+
+        for index, value in enumerate(nums):
+            if value > max_num:
+                max_num = value
+                ind = index
+
+        root = TreeNode(val = max_num)
+        root.left = self.constructMaximumBinaryTree(nums[:ind])
+        root.right = self.constructMaximumBinaryTree(nums[ind+1:])
+        return root
