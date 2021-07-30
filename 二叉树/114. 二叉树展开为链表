@@ -6,35 +6,56 @@
 #         self.left = left
 #         self.right = right
 
-# 递归方法
+# # 递归方法
+# class Solution:
+#     def flatten(self, root: TreeNode) -> None:
+#         """
+#         Do not return anything, modify root in-place instead.
+#         """
+
+#         if not root:
+#             return
+        
+#         # postorder traversal
+#         self.flatten(root.left)
+#         self.flatten(root.right)
+
+#         # the left node and right node are flattened
+
+#         # Temp pointers
+#         leftnode = root.left
+#         rightnode = root.right
+
+#         # reconnect left to the right, and break the root's left node
+
+#         root.right = leftnode
+#         root.left = None
+
+#         # reconnet the original right node to the end of right node
+
+#         pointer = root
+#         while pointer.right:
+#             pointer = pointer.right 
+
+#         pointer.right = rightnode
+
+# 常量额外空间解法 O(1)
 class Solution:
     def flatten(self, root: TreeNode) -> None:
         """
         Do not return anything, modify root in-place instead.
         """
+        node = root
+        while node:
+            if not node.left:
+                node = node.right
+            else:
+                pred = node.left
+                while pred.right:
+                    pred = pred.right
 
-        if not root:
-            return
-        
-        # postorder traversal
-        self.flatten(root.left)
-        self.flatten(root.right)
+                pred.right = node.right
+                node.right, node.left = node.left, None
+                node = node.right
 
-        # the left node and right node are flattened
 
-        # Temp pointers
-        leftnode = root.left
-        rightnode = root.right
-
-        # reconnect left to the right, and break the root's left node
-
-        root.right = leftnode
-        root.left = None
-
-        # reconnet the original right node to the end of right node
-
-        pointer = root
-        while pointer.right:
-            pointer = pointer.right 
-
-        pointer.right = rightnode
