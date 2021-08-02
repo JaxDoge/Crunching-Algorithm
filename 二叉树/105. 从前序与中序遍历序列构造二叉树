@@ -1,0 +1,37 @@
+105. 从前序与中序遍历序列构造二叉树
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+# 递归解法
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+    	return self.builder(preorder,0,len(preorder)-1,inorder,0,len(inorder)-1)
+
+    def builder(self, preorder: List[int], pre_start: int, pre_end: int
+    	, inorder: List[int], in_start: int, in_end: int):
+        # Some bad cases
+        if not pre_start > pre_end:
+        	return None
+
+        # root value is the first element of preorder
+        root = TreeNode(val = preorder[pre_start])
+        root_in_index = None
+        for index, value in enumerate(inorder[in_start:in_end+1],start = in_start):
+        	if value == root.val:
+        		root_in_index = index 
+        		break
+        left_tree_size = root_in_index - in_start
+        # recursion begin!
+        root.left = self.builder(preorder, pre_start+1, pre_start+left_tree_size
+        	, inorder, in_start, root_in_index-1)
+        root.right = self.builder(preorder, pre_start+left_tree_size+1,pre_end
+        	, inorder, root_in_index+1, in_end)
+
+        return root
+
+
