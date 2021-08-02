@@ -7,22 +7,72 @@
 #         self.left = left
 #         self.right = right
 
+# # 递归解法
+# class Solution:
+#     def constructMaximumBinaryTree(self, nums: List[int]) -> TreeNode:
+#         # Find the index of max value
+#         if not nums:
+#             return None
+
+#         max_num = float('-inf')
+#         ind = None
+
+#         for index, value in enumerate(nums):
+#             if value > max_num:
+#                 max_num = value
+#                 ind = index
+
+#         root = TreeNode(val = max_num)
+#         root.left = self.constructMaximumBinaryTree(nums[:ind])    #  尽量不要用切片，切片需要额外的空间和时间
+#         root.right = self.constructMaximumBinaryTree(nums[ind+1:])
+#         return root
+
+# # 递归解法
+# class Solution:
+#     def constructMaximumBinaryTree(self, nums: List[int]) -> TreeNode:
+#         # Find the index of max value
+#         if not nums:
+#             return None
+
+#         max_num = float('-inf')
+#         ind = None
+
+#         for index, value in enumerate(nums):
+#             if value > max_num:
+#                 max_num = value
+#                 ind = index
+
+#         root = TreeNode(val = max_num)
+#         #  尽量不要用切片，切片需要额外的空间和时间
+#         # O(n)
+#         root.left = self.constructMaximumBinaryTree(nums[:ind])    
+#         root.right = self.constructMaximumBinaryTree(nums[ind+1:])
+#         return root
+
+
+
 # 递归解法
 class Solution:
     def constructMaximumBinaryTree(self, nums: List[int]) -> TreeNode:
+        return self.builder(nums,0,len(nums)-1)
+
+    def builder(self,nums,low,high):
         # Find the index of max value
-        if not nums:
+        if not nums or low>high:
             return None
 
         max_num = float('-inf')
-        ind = None
 
-        for index, value in enumerate(nums):
+        ind = None    # record the index of the max number
+
+        for index, value in enumerate(nums[low:high+1], start=low):   # Enumerate default start from 0
             if value > max_num:
                 max_num = value
                 ind = index
 
         root = TreeNode(val = max_num)
-        root.left = self.constructMaximumBinaryTree(nums[:ind])
-        root.right = self.constructMaximumBinaryTree(nums[ind+1:])
+        #  尽量不要用切片，切片需要额外的空间和时间
+        # O(n)
+        root.left = self.builder(nums,low,ind-1)    
+        root.right = self.builder(nums,ind+1,high)
         return root
