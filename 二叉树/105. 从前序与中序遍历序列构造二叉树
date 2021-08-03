@@ -10,28 +10,26 @@
 # 递归解法
 class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
-    	return self.builder(preorder,0,len(preorder)-1,inorder,0,len(inorder)-1)
+    	# 构造 HASH TABLE 用来在中序遍历列表中寻址，这样每层递归不需要做一次 O(n) 的循环定位根节点位置了
+        inorder_index = {element: i for i, element in enumerate(inorder)}
+	    def builder(preorder: List[int], pre_start: int, pre_end: int
+	    	, inorder: List[int], in_start: int, in_end: int):
+	        # Some bad cases
+	        if pre_start > pre_end:
+	        	return None
 
-    def builder(self, preorder: List[int], pre_start: int, pre_end: int
-    	, inorder: List[int], in_start: int, in_end: int):
-        # Some bad cases
-        if not pre_start > pre_end:
-        	return None
+	        # root value is the first element of preorder
+	        root = TreeNode(val = preorder[pre_start])
+	        root_in_index = inorder_index[preorder[pre_start]]
 
-        # root value is the first element of preorder
-        root = TreeNode(val = preorder[pre_start])
-        root_in_index = None
-        for index, value in enumerate(inorder[in_start:in_end+1],start = in_start):
-        	if value == root.val:
-        		root_in_index = index 
-        		break
-        left_tree_size = root_in_index - in_start
-        # recursion begin!
-        root.left = self.builder(preorder, pre_start+1, pre_start+left_tree_size
-        	, inorder, in_start, root_in_index-1)
-        root.right = self.builder(preorder, pre_start+left_tree_size+1,pre_end
-        	, inorder, root_in_index+1, in_end)
+	        left_tree_size = root_in_index - in_start
+	        # recursion begin!
+	        root.left = builder(preorder, pre_start+1, pre_start+left_tree_size
+	        	, inorder, in_start, root_in_index-1)
+	        root.right = builder(preorder, pre_start+left_tree_size+1,pre_end
+	        	, inorder, root_in_index+1, in_end)
 
-        return root
+	        return root
 
+        return builder(preorder,0,len(preorder)-1,inorder,0,len(inorder)-1)
 
