@@ -1,0 +1,28 @@
+230. Kth (1-indexed) Smallest Element in a BST
+
+# class TreeNode:
+# 	def __init__(self, val=0, left=None, right=None):
+# 		self.val = val
+# 		self.left = left
+# 		self.right = right
+
+# BST 最基本的性质: 中序遍历为升序;通过对比根节点的值，知道目标节点在左子树还是在右子树
+
+class Solution:
+    def kthSmallest(self, root: TreeNode, k: int) -> int:
+        res = 0
+        # record the rank of current node
+        rank = 0
+        node = root
+        def traverser(node: TreeNode, k: int):
+            nonlocal rank, res    # Don't you ever fucking forget it!!!! It isn't list!!
+            if not node:
+                return
+            traverser(node.left,k)
+            rank += 1
+            if rank == k:
+                res = node.val
+                return
+            traverser(node.right,k)
+        traverser(node,k)
+        return res
