@@ -26,3 +26,30 @@ class Solution:
             traverser(node.right,k)
         traverser(node,k)
         return res
+
+
+
+# 有了size字段，外加 BST 节点左小右大的性质，对于每个节点node就可以通过node.left推导出node的排名，从而做到我们刚才说到的对数级算法。
+
+
+
+# 迭代解法，迭代在 bst 中的主要价值是可以利用
+# 中序遍历，紫金解法
+class Solution:
+	def kthSmallest(self, root: TreeNode, k: int) -> int:
+		# Exploit list as a stack
+		stack = [root]
+
+		#
+		while stack:
+			i = stack.pop()
+			if isinstance(i, TreeNode):
+				stack.extend([i.right,i.val,i.left])
+			elif isinstance(i,int):
+				k -= 1 # when k == 0, we get the node
+				if k == 0:
+					return i
+			else:
+				pass
+
+
