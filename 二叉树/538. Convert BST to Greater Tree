@@ -1,0 +1,27 @@
+538. Convert BST to Greater Tree
+
+# class TreeNode:
+# 	def __init__(self, val = 0, left = None, right = None):
+# 		self.val = val
+# 		self.left = left
+# 		self.right = right
+
+
+# 递归解法
+# 反向中序遍历可以得到降序结果
+class Solution:
+	def convertBST(self, root: TreeNode) -> TreeNode:
+		node = root  # preserve the root reference
+        sumup = 0
+		def reverseinorder(node):
+			nonlocal sumup
+			if not node: return
+
+            reverseinorder(node.right)
+            sumup += node.val
+            node.val = sumup
+            reverseinorder(node.left)
+        reverseinorder(node)
+        return root
+
+
