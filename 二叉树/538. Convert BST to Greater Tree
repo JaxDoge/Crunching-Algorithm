@@ -25,3 +25,34 @@ class Solution:
         return root
 
 
+# Morris 解法
+
+class Solution:
+	def convertBST(self, root: TreeNode) -> TreeNode:
+		if not root: return root
+
+		node = root # preserve the root reference
+		sumup = 0
+
+		while node:
+			if not node.right:
+				sumup += node.val
+				node.val = sumup
+                node = node.left
+			else:
+				pre = node.right
+				while pre.left and pre.left != node:
+					pre = pre.left
+
+				if not pre.left:
+					pre.left = node 
+					node = node.right
+				else: # 右子树node指针遍历完了
+					sumup += node.val
+					node.val = sumup
+					node = node.left
+					pre.left = None   # 这里要断开链接，因为返回的是个 TreeNode，否则会在数结构中无限循环
+		return root
+
+
+
