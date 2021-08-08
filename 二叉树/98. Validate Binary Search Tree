@@ -1,0 +1,25 @@
+98. Validate Binary Search Tree
+
+class TreeNode:
+	def __init__(self, val = 0, left = None, right = None):
+		self.val = val 
+		self.left = left
+		self.right = right
+
+
+# 递归解法
+class Solution:
+	def isValidBST(self, root: TreeNode) -> bool:
+		# Find out all invalida situation
+		def helper(root: TreeNode, min: TreeNode, max: TreeNode):
+            if not root: return True
+            # the left node value should smaller than the root value, so the max value of left tree is current root
+            if max and root.val >= max.val:
+            	return False
+            # vice versa
+            if min and root.val <= min.val:
+            	return False
+            return helper(root.left,min,root) and helper(root.right,root,max)
+
+        return helper(root,None,None)
+
