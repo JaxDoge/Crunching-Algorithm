@@ -13,10 +13,9 @@ class Solution:
 		# Find out all invalida situation
 		def helper(root: TreeNode, min: TreeNode, max: TreeNode):
             if not root: return True
-            # the left node value should smaller than the root value, so the max value of left tree is current root
-            if max and root.val >= max.val:
+            # the rule is when go into the right subtree, updating the minium limitation, and vise versa
+            if max and root.val >= max.val:  # the maxium and minium value start from None
             	return False
-            # vice versa
             if min and root.val <= min.val:
             	return False
             return helper(root.left,min,root) and helper(root.right,root,max)
