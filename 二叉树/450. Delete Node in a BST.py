@@ -19,7 +19,7 @@ class Solution:
 	    	if key == node.val:
 	    		#  Situation I: the node has no left or right node, or neither, replace the node with another child node, or just with None
 	    		if not node.left:
-	    			return node.right  # if node.right is None, it is still OK
+	    			return node.right  # if node.right is None, it is still OK -- it means delete the node directly
 	    		if not node.right:
 	    			return node.left
 
