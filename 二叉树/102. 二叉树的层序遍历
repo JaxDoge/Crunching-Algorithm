@@ -65,27 +65,27 @@ class Solution:
 
 
 
-# 递归解法
+递归解法
 
-# class Solution:
-#     def levelOrder(self, root: TreeNode) -> List[List[int]]:
-#     	node = root
-#     	res = []
+class Solution:
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+    	node = root
+    	res = []
 
-#     	def iterator(node_p, level):
-#     		if len(res) == level:   # level is the index, so it come from zero; Add new sub-list in terms of level
-#     			res.append([])
+    	def iterator(node_p, level):
+    		if len(res) == level:   # level is the index, so it come from zero; Add new sub-list in terms of level
+    			res.append([])
 
-#     		res[level].append(node_p.val)
+    		res[level].append(node_p.val)
 
-#     		if node_p.left:
-#     			iterator(node_p.left, level+1)
-#     		if node_p.right:
-#     			iterator(node_p.right, level+1)
+    		if node_p.left:
+    			iterator(node_p.left, level+1)
+    		if node_p.right:
+    			iterator(node_p.right, level+1)
 
-#     	if not node:
-#     		return res
+    	if not node:
+    		return res
 
-#     	iterator(node, level = 0)
-#     	return res
+    	iterator(node, level = 0)
+    	return res
 
