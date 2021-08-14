@@ -25,7 +25,7 @@ class Solution:
             left_search_res = backorder(node.left,p,q)
             right_search_res = backorder(node.right,p,q)
 
-            # Situation 1, 目标 node 分别在左右子树，返回这个根节点
+            # Situation 1, 目标 node 分别在左右子树，返回这个根节点，这是搜索结果逐层上传的一种结果，汇合
             if left_search_res and right_search_res:
                 return node 
 
@@ -33,7 +33,8 @@ class Solution:
             if not left_search_res and not right_search_res:
                 return None  
 
-            # Situation 3, 目标节点在 left_search_res 或 right_search_res 中有找到，用找到的那边代替 node 返回
+            # Situation 3, 目标节点在 left_search_res 或 right_search_res 中有找到
+            # 用找到的那边代替 node 返回，通过这种方式+后序遍历逐层上传搜索到的结果
             return left_search_res if not right_search_res else right_search_res
         return backorder(root,p,q)
 
