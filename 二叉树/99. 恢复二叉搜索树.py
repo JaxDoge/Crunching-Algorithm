@@ -46,3 +46,45 @@ class Solution:
         node_list[p].val, node_list[q].val = node_list[q].val, node_list[p].val
         return
 
+# Morris 解法, inorder traversal
+
+class Solution:
+    def recoverTree(self, root: TreeNode) -> None:
+		# badcase
+		if not root: return
+
+		node = root
+        swap_list = []
+        p = None
+		while node:   # Before node traver to the ultra right
+	        if not node.left:
+	        	if p:
+		        	if node.val < p.val and not swap_list:
+	                    swap_list.extend([p, node])
+	                elif node.val < p.val and len(swap_list) == 2:
+	                	swap_list.pop()
+	                	swap_list.append(node)
+	        	p = node
+	            node = node.right
+	        else:
+		        pred = node.left      # One step left
+		        while pred.right and pred.right != node:
+		        	pred = pred.right
+
+		        if not pred.right:
+		        	pred.right = node
+		        	pred = None
+		        	node = node.left 
+		        else:    # left subtree has travered, go right
+		        	if p:
+			        	if node.val < p.val and not swap_list:
+		                    swap_list.extend([p, node])
+		                elif node.val < p.val and len(swap_list) == 2:
+		                	swap_list.pop()
+		                	swap_list.append(node)
+	                p = node
+		        	node = node.right
+		        	pred.right = None   # break dummy link
+        if len(swap_list) == 2:
+        	swap_list[0].val, swap_list[1].val = swap_list[1].val, swap_list[0].val
+	    return

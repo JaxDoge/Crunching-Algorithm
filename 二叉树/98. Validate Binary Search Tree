@@ -21,4 +21,3 @@ class Solution:
             return helper(root.left,min,root) and helper(root.right,root,max)
 
         return helper(root,None,None)
-
