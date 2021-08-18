@@ -15,28 +15,32 @@
 # 快慢指针
 class Solution:
     def sortedListToBST(self, head: ListNode) -> TreeNode:
-    	# badcase
-    	if not head: return None
+        # badcase
+        if not head: return None
 
-    	def locateRoot(start: ListNode, end: ListNode):
-    		p, q = head
-    		while p != end and p.next != end:
-    			if p.next.next:    # 如果p正好在倒数第一个节点，避免报错
-    			    p = p.next.next 
-    			else:
-    				p = p.next
-    			q = q.next
-    		return q
+        def locateRoot(head: ListNode, end: ListNode):
+            p = q = head
+            while p != end and p.next != end:
+                # print(q.val)
+                if p.next.next:    # 如果p正好在倒数第一个节点，避免报错
+                    p = p.next.next 
+                else:
+                    p = p.next
+                q = q.next
+            return q
 
-    	def treeConstructor(head: ListNode, end: ListNode):
+        def treeConstructor(head: ListNode, end: ListNode):
+
             if head == end:
-            	return None
+                return None
 
-    		root_listnode = locateRoot(head,end)
-    		root_val = root_listnode.val
-    		root = TreeNode(val = root_val)
+            root_listnode = locateRoot(head,end)
+            root_val = root_listnode.val
+            # print(root_val, head.val, root_listnode)
+
+            
+            root = TreeNode(val = root_val)
             root.left = treeConstructor(head,root_listnode)
-            # 需要修改，搞简单了
             root.right = treeConstructor(root_listnode.next,end)
             return root
         res = treeConstructor(head, None)
