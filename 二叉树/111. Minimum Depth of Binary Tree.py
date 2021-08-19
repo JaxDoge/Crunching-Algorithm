@@ -23,4 +23,33 @@ class Solution:
     	return lowestSubtree(root)
 
 # 层序遍历解法
-d
+class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        if not root: return 0
+        import collections
+        node_queue = collections.deque()
+        # traver_list = []                 # Maybe we don't need it
+        height = 1             # Record current travesal height, start from one
+        node_queue.append(root)
+
+        while node_queue:
+            sub_loop_num = len(node_queue)    # Record the number of nodes in this layer
+
+            for i in range(sub_loop_num):
+                pop_node = node_queue.popleft()
+                if pop_node.left:
+                    node_queue.append(pop_node.left)
+                if pop_node.right:
+                    node_queue.append(pop_node.right)
+                if not pop_node.left and not pop_node.right:  # Found a leaf, it's the first leaf from left
+                    return height
+
+            height += 1
+        return height
+
+
+
+
+
+
+

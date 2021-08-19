@@ -37,26 +37,26 @@ class Node:
 
 # space complexity O(1) 解法：
 
-# class Solution:
-# 	def connect(self, root: 'Node') -> 'Node':
-# 	  	if not root:
-# 	  		return root
+class Solution:
+	def connect(self, root: 'Node') -> 'Node':
+	  	if not root:
+	  		return root
 
-# 	  	leftmost = root
+	  	leftmost = root
 
-# 	  	while leftmost.left:
-# 	  		node = leftmost
-# 	  		while node:
-# 		  		if not node.left.next:
-# 		  			node.left.next = node.right
+	  	while leftmost.left:
+	  		node = leftmost
+	  		while node:
+		  		if not node.left.next:
+		  			node.left.next = node.right
 
-# 		  		if node.left.next and node.next:
-# 		  			node.right.next = node.next.left
-# 		  		node = node.next
+		  		if node.left.next and node.next:
+		  			node.right.next = node.next.left
+		  		node = node.next
 
-# 	  		leftmost = leftmost.left
+	  		leftmost = leftmost.left
 
-# 	  	return root
+	  	return root
 
 
 # 递归写法
