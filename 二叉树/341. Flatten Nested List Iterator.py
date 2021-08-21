@@ -56,7 +56,7 @@ class NestedIterator:
 # while i.hasNext(): v.append(i.next())
 
 
-
+# 真正的迭代器
 
 class NestedIterator:
     def __init__(self, nestedList: [NestedInteger]):
@@ -70,12 +70,14 @@ class NestedIterator:
         if cur.isInteger():
             self.i += 1
             return cur.getInteger()
-        else: return self.iterator.next()
+        else: 
+            return self.iterator.next()
     
     def hasNext(self) -> bool:
         while self.i < self.size:
             cur = self.nestedList[self.i]
-            if cur.isInteger(): return True
+            if cur.isInteger(): 
+                return True
             else:
                 if self.iterator == None:
                     self.iterator = NestedIterator(cur.getList())
