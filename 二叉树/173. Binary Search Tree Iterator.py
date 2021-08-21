@@ -27,10 +27,7 @@ class BSTIterator:
     def hasNext(self) -> bool:
         return len(self.stack) > 0
 
-作者：lcbin
-链接：https://leetcode-cn.com/problems/binary-search-tree-iterator/solution/doocskai-yuan-she-qu-python3-java-c-go-d-ohom/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 
 
 
