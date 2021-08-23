@@ -8,6 +8,8 @@
 #         self.left = left
 #         self.right = right
 
+
+# 中序遍历迭代器
 class BSTIterator:
 
     def __init__(self, root: TreeNode):
@@ -19,7 +21,7 @@ class BSTIterator:
     def next(self) -> int:
         cur = self.stack.pop()
         node = cur.right
-        while node:  # if cur has right node
+        while node:  # if cur has right node, same as before, traverse though the right subtree 
             self.stack.append(node)
             node = node.left
         return cur.val
