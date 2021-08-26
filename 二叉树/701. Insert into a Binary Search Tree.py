@@ -12,6 +12,8 @@ class Solution:
 
     	if not root:
     		root = TreeNode(val = val)
+            return root
+            
     	while root:
     		if val >= root.val:
     			if root.right:

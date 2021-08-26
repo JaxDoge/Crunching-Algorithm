@@ -55,9 +55,9 @@ class Solution:
             if node:
                 # 给每个子数编码不同的 uid，由于 builder 本身返回的是唯一索引 uid，node.val, builder(node.left), builder(node.right) 完整代表了一个子树结构
                 uid = subtrees[node.val, builder(node.left), builder(node.right)]
-                count[uid] += 1
+                counter[uid] += 1
                 # 第一次重复则打印根节点
-                if count[uid] == 2:
+                if counter[uid] == 2:
                     res.append(node)
                 return uid
         builder(root)

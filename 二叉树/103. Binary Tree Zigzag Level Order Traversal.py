@@ -13,7 +13,7 @@
 # 层序遍历
 class Solution:
     def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
-    	if not root: return None
+    	if not root: return []
     	
     	from collections import deque
     	res = []
