@@ -43,6 +43,7 @@ class Solution:
 # 迭代解法，可以先断开 end 与后面节点的链接，然后把 start 传入 subReverse，这样就少一个参数传入
 class Solution:
     def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
+        # Bad case: reach the None node or the end node
         if not head or not head.next:
             return head 
         # dummy head 
@@ -70,7 +71,7 @@ class Solution:
             pre = end = start 
         return dummy_head.next 
 
-
+    # reverse a sub-linknode from start and return the new head node
     def subReverse(self, start):
         pre = None 
         cur = next_node = start 
