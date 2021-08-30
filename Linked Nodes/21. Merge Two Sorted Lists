@@ -20,12 +20,11 @@ class Solution:
         frog = dummy_head
 
         while l1 and l2:
-	        # frog in the same link, treat nonetype with caution
+	        # frog's next point to the smaller node and then frog jump to it 
 	        if l1.val <= l2.val:
 	        	frog.next = l1
 	        	l1 = l1.next
 	        	frog = frog.next
-	        # frog leap to another link
 	        else:
 	        	frog.next = l2
 	        	l2 = l2.next 
