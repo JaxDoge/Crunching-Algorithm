@@ -109,7 +109,7 @@ class Solution:
                 # 相邻节点出度 -1
                 for dx, dy in directions:
                     new_row, new_column = row + dx, column + dy
-                    # 有个疑问，最后一个判断条件需要吗？把出度已经是0的相邻节点，出度减成负数也没关系吧
+                    # 有个疑问，最后一个判断条件需要吗？必须要，否则不是相邻节点了，会把其他路线提前截断
                     if 0<=new_row<rows and 0<=new_column<columns and matrix[row][column]>matrix[new_row][new_column]:
                         # 调整对应的 out_degree 节点中的出度值
                         out_degree[new_row][new_column] -= 1
@@ -118,8 +118,6 @@ class Solution:
                             helper_queue.append((new_row, new_column))
 
         return res
-
-
 
 
 
