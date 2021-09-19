@@ -61,7 +61,8 @@ class LRUCache:
         self.dummy_head.next = new_node 
         # record the new node in the dictionary
         self.nodedict[key] = new_node  
-
+        
+        #这里的逻辑不专业，应该先判断linkedhashmap 大小，再决定是否删除，再插入新节点
         if len(self.nodedict) > self.size:
             # evict the end node
             end_node = self.dummy_end.previous

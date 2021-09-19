@@ -1,6 +1,87 @@
 130. Surrounded Regions
 [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
 
+# DFS
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        if not board: return
+
+        rows, columns = len(board), len(board[0])
+        directions = [(1,0),(-1,0),(0,1),(0,-1)]
+        def dfsSearch(row, col):
+            nonlocal board
+            # 坐标非法，或者该坐标值不为'O'
+            if not 0<=row<rows or not 0<=col<columns or board[row][col] != 'O':
+                return
+
+            board[row][col] = '#'  # Mark all node that connet to the edges
+            for dx, dy in directions:
+                newR, newC = row+dx, col+dy
+                dfsSearch(newR, newC)
+
+        # Iterate four edges
+        for i in range(rows):
+            dfsSearch(i,0)
+            dfsSearch(i,columns-1)
+
+        for i in range(1,columns-1):
+            dfsSearch(0,i)
+            dfsSearch(rows-1,i)
+
+        # Iterate the whole board
+        for row in range(rows):
+            for col in range(columns):
+                if board[row][col] == 'O':
+                    board[row][col] = 'X'
+                if board[row][col] == '#':
+                    board[row][col] = 'O'
+
+# BFS
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        if not board: return
+        rows, columns = len(board), len(board[0])
+        directions = [(1,0),(-1,0),(0,1),(0,-1)]
+
+        # BFS queue
+        import collections
+        helper_queue = collections.deque()
+
+        # BFS four edges
+        for i in range(rows):
+            if board[i][0] == 'O':
+                helper_queue.append((i,0))
+                board[i][0] = '#'
+            if board[i][columns-1]:
+                helper_queue.append((i,columns-1))
+                board[i][columns-1] = '#'
+        for i in range(1,columns):
+            if board[0][i] == 'O':
+                helper_queue.append((0,i))
+                board[0][i] = '#'
+            if board[rows-1][i] == 'O':
+                helper_queue.append((rows-1,i))
+                board[rows-1][i] = '#'
+
+        # BFS inner cells
+        while helper_queue:
+            row, col = helper_queue.popleft()
+            for dx, dy in directions:
+                newR, newC = row+dx, col+dy
+                if 0<=newR<rows and 0<=newC<columns and board[newR][newC] == 'O':
+                    board[newR][newC] = '#'
+                    helper_queue.append((newR,newC))
+
+        for row in range(rows):
+            for col in range(columns):
+                if board[row][col] == 'O':
+                    board[row][col] = 'X'
+                if board[row][col] == '#':
+                    board[row][col] = 'O'
+
+
+
+
 # Union-Find Solution
 class UF:
     def __init__(self, count: int):
