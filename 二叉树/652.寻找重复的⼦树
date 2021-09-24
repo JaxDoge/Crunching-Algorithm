@@ -1,0 +1,37 @@
+652.寻找重复的⼦树
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def findDuplicateSubtrees(self, root: TreeNode) -> List[TreeNode]:
+    	# hash_map for counting the subtrees
+    	hash_map = dict()
+    	# result list
+    	res = []
+
+    	def ListAllSubtree(root):
+    		node = root
+    		if root == None:
+    			return 'Empty'  # The flag of empty node, so one traversal could rep one single tree
+
+    		left_subtree = ListAllSubtree(node.left)
+    		right_subtree = ListAllSubtree(node.right)
+
+    		this_tree = left_subtree + ',' + right_subtree + ',' + str(node.val)
+    		freqency = hash_map[this_tree] if this_tree in hash_map else 0
+    		if freqency == 1:
+    			res.append(node)
+    		if freqency == 0:
+    			hash_map[this_tree] = 1
+    		if freqency > 0:
+    			hash_map[this_tree] += 1
+    		return this_tree
+    	ListAllSubtree(root)
+    	return res
+
