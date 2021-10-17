@@ -89,3 +89,35 @@ class Solution:
                         dp[i][j] = dp[i-1][j]
             return dp[length][sums]
         return allSubsetA(int((target+total_sum)/2))
+
+
+# 压缩 DP 维度至一维
+
+
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        total_sum = 0
+        for n in nums:
+            total_sum += n
+        # bad cases
+        if (target > total_sum or (target+total_sum) % 2 != 0 or target < -total_sum):
+            return 0
+
+        def allSubsetA(sums):
+            nonlocal nums
+            length = len(nums)
+            # dp 表的行数表示 前 i 个物品, 列数表示目标重量是 j，因此索引要多加一
+            dp = [0 for _ in range(sums+1)]
+            # 如果没有目标重量，没有物品，则组合方法只有一个，A 为空集
+            dp[0] = 1
+
+            # 遍历更新
+            for i in range(1, length+1):
+                for j in range(sums, -1, -1):
+                    # 如果 j 容量的背包能装下第 i 个物品, 注意对应 nums 索引是 i-1
+                    if j >= nums[i-1]:
+                        dp[j] = dp[j]+dp[j-nums[i-1]]
+                    else: #没有空间，只能不装 i
+                        dp[j] = dp[j]
+            return dp[-1]
+        return allSubsetA(int((target+total_sum)/2))
