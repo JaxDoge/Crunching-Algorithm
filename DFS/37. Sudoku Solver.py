@@ -40,6 +40,7 @@ class Solution:
                     return False
                 if p_board[i][col] == char:
                     return False
+                # How to iterate a 3x3 sub-square:
                 if p_board[(row // 3) * 3 + i // 3][(col // 3) * 3 + i % 3] == char:
                     return False
 
