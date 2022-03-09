@@ -96,3 +96,20 @@ class Solution:
         for i in range(n):
             rd = random.randint(i, n - 1)
             init_nums[i], init_nums[rd] = init_nums[rd], init_nums[i]
+
+
+    # def partition(self, arr, low, high):
+    #     i = (low - 1)  # index of smaller element
+    #     pivot = arr[high]  # pivot
+    #
+    #     for j in range(low, high):
+    #
+    #         # If current element is smaller than or
+    #         # equal to pivot
+    #         if arr[j] <= pivot:
+    #             # increment index of smaller element
+    #             i = i + 1
+    #             arr[i], arr[j] = arr[j], arr[i]
+    #
+    #     arr[i + 1], arr[high] = arr[high], arr[i + 1]
+    #     return (i + 1)
