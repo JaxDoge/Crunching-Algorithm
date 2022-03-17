@@ -17,7 +17,7 @@ class Solution:
     	# 按 width 排序，相同 width 按 height 倒排
     	sort_envelopes = sorted(envelopes, key = functools.cmp_to_key(udcmp))
 
-    	# 对 height 列表寻找 LIS
+    	# 对 height 列表寻找 LIS - longest increasing sequence
     	height = []
     	for i in sort_envelopes:
     		height.append(i[1])
