@@ -35,9 +35,9 @@ class Solution:
                     L += 1
                     R -= 1
 
-                elif sum([nums[i], nums[L], nums[R]]) >= 0:
+                elif sum([nums[i], nums[L], nums[R]]) > 0:
                     R -= 1
-                elif sum([nums[i], nums[L], nums[R]]) <= 0:
+                elif sum([nums[i], nums[L], nums[R]]) < 0:
                     L += 1
 
         return res
