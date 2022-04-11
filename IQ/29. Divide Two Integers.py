@@ -12,7 +12,7 @@ class Solution:
             if divisor == -1:
                 return INT_MAX
         
-        # 考虑除数为最小值的情况
+        # 考虑除数为最小值的情况，之后二分查找可以将上界设为 -INT_MIN - 1，也就是 INT_MAX
         if divisor == INT_MIN:
             return 1 if dividend == INT_MIN else 0
         # 考虑被除数为 0 的情况
@@ -30,30 +30,45 @@ class Solution:
             divisor = -divisor
             rev = not rev
 
+        # 修改快速乘实现对任意 z 的判断，只用加法实现乘法，时间复杂度 O(logz)
+        def quickAdd(y: int, z: int, x: int) -> bool:
+            # x 和 y 是负数，z 是正数
+            # 需要判断 z * y >= x 是否成立
+            result, add = 0, y
+            while z > 0:
+                # 与运算判断奇偶性
+                if (z & 1) == 1:
+                    # 需要保证 result + add >= x， 注意 add 是负数，这个加和会随着迭代进行越来越小
+                    # 较大的 Z 可能导致 add 过大溢出，故使用减法判断
+                    if result < x - add:
+                        return False
+                    result += add
+                if z != 1:
+                    # 需要保证 add + add >= x，否则提前结束，理论上可以不要这个判断，因为无论如何都要进入上一个分支，实际可以提高速度
+                    if add < x - add:
+                        return False
+                    add += add
+                # 不能使用除法
+                z >>= 1
+            return True
 
+        # bisect, locate the right boundary
+        # if bisection is failure, quotient should be zero
+        left, right, ans = 1, INT_MAX, 0
+        while left <= right:
+            # 注意溢出，并且不能使用除法
+            mid = left + ((right - left) >> 1)
+            check = quickAdd(divisor, mid, dividend)
+            if check:
+                ans = mid
+                # 注意溢出
+                if mid == INT_MAX:
+                    break
+                left = mid + 1
+            else:
+                right = mid - 1
 
-        # decide the sign
-        if dividend > 0 and divisor > 0:
-            sign = 1
-        elif dividend < 0 and divisor < 0:
-            sign = 1
-        else:
-            sign = -1
+        return -ans if rev else ans
 
-        dividend = abs(dividend)
-        divisor = abs(divisor)
-
-        remain = dividend
-        quotient = 0
-        while True:
-            if remain < divisor:
-                break
-            remain -= divisor
-            quotient += 1
-
-        if sign == -1:
-            return quotient - quotient -quotient
-        else:
-            return quotient
 
 
