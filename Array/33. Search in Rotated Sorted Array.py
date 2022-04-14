@@ -19,7 +19,7 @@ class Solution:
                 return mid
 
             # figure out which part is ordered
-            # Consider boundary case, if the l == mid, there must be only two element left to check, we hope move l to l + 1
+            # Consider boundary case [3,1], if the l == mid, there must be only two element left to check, we hope move l to l + 1
             elif nums[0] <= nums[mid]:
                 # previous part is ordered
                 if nums[0] <= target < nums[mid]:
