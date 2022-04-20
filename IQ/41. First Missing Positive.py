@@ -9,6 +9,7 @@ class Solution:
                 nums[i] = n + 1
         
         for i in range(n):
+            # Notice: the value could already be negative
             num = abs(nums[i])
             if num <= n:
                 nums[num - 1] = -abs(nums[num - 1])
