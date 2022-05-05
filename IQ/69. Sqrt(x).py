@@ -1,6 +1,6 @@
 69. Sqrt(x)
 
-
+# newton interpolation
 class Solution:
     def mySqrt(self, x: int) -> int:
         if x == 0:
