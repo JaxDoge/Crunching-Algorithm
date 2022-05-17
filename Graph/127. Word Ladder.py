@@ -51,8 +51,9 @@ class Solution:
     	# 构造词图
     	for word in wordList:
     		addEdge(word)
-
-    	addEdge(beginWord)
+        if beginWord not in edge_dict:
+            addEdge(beginWord)
+            
     	# Badcase，endWord 不在词字典中，完全不可能连接，用哈希表判断比原始 list 快
     	if endWord not in wordID:
     		return 0
