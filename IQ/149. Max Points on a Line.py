@@ -39,7 +39,7 @@ class Solution:
                     if b < 0:
                         a = -a
                         b = -b
-                    # reduction of fraction
+                    # corner case 3, different expression of the same fraction; need reduction of fraction
                     g = self.gcd(a, b)
                     a /= g
                     b /= g
