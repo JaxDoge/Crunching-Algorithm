@@ -20,7 +20,7 @@ class TwoSum:
     	return False
 
 
-# Solution 2, standrad
+# Solution 2, standard
 
 class TwoSum:
 
