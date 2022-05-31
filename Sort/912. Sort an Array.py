@@ -60,3 +60,35 @@ class Solution:
             nums[i], nums[rd] = nums[rd], nums[i]
 
 
+
+# Heap Sort
+
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        def maxHeapify(nums, root, heapSize):
+            left = root * 2 + 1
+            right = root * 2 + 2
+            largest = root  # assume root has the largest value
+
+            if left < heapSize and nums[left] > nums[largest]:
+                largest = left
+            if right < heapSize and nums[right] > nums[largest]:
+                largest = right
+
+            if largest != root:
+                nums[largest], nums[root] = nums[root], nums[largest]
+                maxHeapify(nums, largest, heapSize)
+
+        def buildHeap(nums):
+            n = len(nums)
+
+            for node in range(n // 2 - 1, -1, -1):
+                maxHeapify(nums, node, n)
+
+        buildHeap(nums)
+        m = len(nums)
+        for size in range(m - 1, 0, 1):
+            nums[0], nums[size] = nums[size], nums[0]
+            maxHeapify(nums, 0, size)
+
+        return nums

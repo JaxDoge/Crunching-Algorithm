@@ -13,7 +13,7 @@ class Solution:
                 largest = left_node
             if right_node < heap_size and array[right_node] > array[largest]:
                 largest = right_node
-            # 如果 root 比两个子节点小
+            # 如果 root 比两个子节点小，交換節點值，對受影響的子樹繼續執行 Heapify
             if largest != root:
                 array[root], array[largest] = array[largest], array[root]
                 maxHeapify(array, largest, heap_size)
@@ -31,7 +31,7 @@ class Solution:
         buildHeap(nums, heap_size)
 
         # 开始弹出，弹出到第 k-1 次的时候 num[0] 就是第 kth largest number
-        # 每次弹出要把最后一个 Index 对应的值放到 num[0]，于是可以从后遍历；未了保留信息，弹出的数和最后的数交换位置
+        # 每次弹出要把最后一个 Index 对应的值放到 num[0]，于是可以从后遍历；為了保留信息，弹出的数和最后的数交换位置
         # 而不是直接丢弃，同时 heap_size - 1
         for index in range(len(nums)-1, len(nums)-k, -1):
             nums[0], nums[index] = nums[index], nums[0]
