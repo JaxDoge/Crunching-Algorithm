@@ -51,7 +51,7 @@ class Solution:
         for i in range(left, right + 1):
             tmp[i] = nums[i]
 
-        # two points
+        # two pointers
         i = left
         j = mid + 1
 
