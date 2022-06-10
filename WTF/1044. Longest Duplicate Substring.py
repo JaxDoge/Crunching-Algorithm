@@ -2,6 +2,7 @@
 
 
 # Approach #1, dichotomy + string hash
+# Rabin-Karp + dichotomy
 # Last 2 unit tests TLE!!
 class Solution(object):
     def longestDupSubstring(self, s):
