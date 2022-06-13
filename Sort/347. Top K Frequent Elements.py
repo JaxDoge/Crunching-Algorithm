@@ -76,3 +76,38 @@ class Solution(object):
         for i in range(n):
             rd = randint(i, n - 1)
             array[i], array[rd] = array[rd], array[i] 
+
+
+
+
+# bucket sort
+# O(n) space complexity
+# O(n) time cmplexity
+
+class Solution(object):
+    def topKFrequent(self, nums, k):
+        from collections import defaultdict
+        num2F = defaultdict(int)
+
+        for num in nums:
+            num2F[num] += 1
+
+        maxF = 0
+        for item in num2F.items():
+            if item[1] > maxF:
+                maxF = item[1]
+
+        # create a bucket list with length maxF + 1
+        bucket = [[] for _ in range(maxF + 1)]  # Watch out !! the nest list need initial in this way
+        for nb, v in num2F.items():
+            bucket[v].append(nb)
+
+        res = []
+        for i in range(maxF, -1, -1):  #  Start from maxF
+            if len(res) >= k:
+                break
+            if len(bucket[i]) == 0:
+                continue
+            res.extend(bucket[i])
+
+        return res

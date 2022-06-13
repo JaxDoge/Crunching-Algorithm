@@ -49,12 +49,13 @@ class Solution:
 # Well, there is another intuitive approach
 # it's faster
 # note that the j and i could be out bounded
+from bisect import bisect
 class Solution:
     def findRadius(self, houses: List[int], heaters: List[int]) -> int:
         ans = 0
         heaters.sort()
         for house in houses:
-            j = bisect_right(heaters, house)
+            j = bisect(heaters, house)
             i = j - 1
             rightDistance = heaters[j] - house if j < len(heaters) else float('inf')
             leftDistance = house - heaters[i] if i >= 0 else float('inf')
