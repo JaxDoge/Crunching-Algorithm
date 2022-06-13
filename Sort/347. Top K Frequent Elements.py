@@ -111,3 +111,75 @@ class Solution(object):
             res.extend(bucket[i])
 
         return res
+
+
+
+# Heapsort
+
+# new info
+# rewrite the python heapq to adapt the flexible cmp function
+
+from heapq import heappop, heappush, heapify, heappushpop
+class Myheap(object):
+    def __init__(self, initial = None, key = lambda x: x):
+        # heapq use the first element in a tuple to compare objects
+        # so we could wrap the original objects in (key(item), selfIdx, item)
+        self.key = key
+        # (The extra self.index part is to avoid clashes when the evaluated key value is a draw and the stored value is not directly comparable - otherwise heapq could fail with TypeError)
+        self.index = 0
+        if initial:
+            self._data = [(key(item), i, item) for i, item in enumerate(initial)]
+            self.index = len(initial)
+            heapify(self._data)
+        else:
+            self._data = []
+
+    def __len__(self):
+        return len(self._data)
+
+    def getTop(self):
+        return self._data[0]
+
+    def push(self, item):
+        heappush(self._data, (self.key(item), self.index, item))
+        self.index += 1
+
+    def pop(self):
+        return heappop(self._data)[2]
+
+    def pushpop(self, item):
+        outcast = heappushpop(self._data, (self.key(item), self.index, item))
+        self.index += 1
+        return outcast
+
+    def getHeap(self):
+        return self._data
+
+
+
+
+class Solution(object):
+    def topKFrequent(self, nums, k):
+        from collections import defaultdict
+
+        num2F = defaultdict(int)
+        for num in nums:
+            num2F[num] += 1
+
+
+        heapL = Myheap(key = lambda x: x[1])
+
+        # add the first k elements in to heapL
+        for item in num2F.items():
+            if len(heapL) >= k:
+                if heapL.getTop()[0] < item[1]:
+                    heapL.pushpop(item)
+                continue
+            heapL.push(item)
+
+        res = []
+        for _, _, item in heapL.getHeap():
+            res.append(item[0])
+            
+        return res
+
