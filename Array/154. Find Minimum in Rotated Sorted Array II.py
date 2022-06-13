@@ -5,6 +5,9 @@
 class Solution:
     def findMin(self, nums: List[int]) -> int:
         n = len(nums)
+
+        # Note that it is a unconventional dichotomy code
+        # if your wanna find a certain value, the last element that left == right is neglected
         left, right = 0, n - 1
 
         while left < right:
