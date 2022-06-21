@@ -24,7 +24,7 @@ class Solution:
         for i in range(maxN + 1):
             if bucket[i] == 0:
                 continue
-            if res >= k:
+            if len(res) >= k:
                 break
             else:
                 res.extend([i] * bucket[i])
