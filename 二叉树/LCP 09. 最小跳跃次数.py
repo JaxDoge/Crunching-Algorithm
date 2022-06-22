@@ -79,3 +79,26 @@ class Solution:
 
 
 
+# Dynamic Programming
+# https://leetcode.cn/problems/zui-xiao-tiao-yue-ci-shu/solution/zui-xiao-tiao-yue-ci-shu-by-leetcode-solution/
+
+class Solution:
+    def minJump(self, jump: List[int]) -> int:
+        res = n = len(jump)
+        f = [n] * (n + 1)
+        f[0] = 0
+        max_dis = [0] * (n + 1) 
+        w = 0
+        for i in range(0,n):
+            if i >= max_dis[w]:
+                w += 1
+            f[i] = min(f[i], w + 1)
+            
+            jump_tmp = i + jump[i]
+            if jump_tmp >= n:
+                res = min(res,f[i] + 1)
+            else:
+                f[jump_tmp] = min(f[jump_tmp],f[i]+1)
+                max_dis[f[jump_tmp]] = max(max_dis[f[jump_tmp]],jump_tmp)
+        return res
+
