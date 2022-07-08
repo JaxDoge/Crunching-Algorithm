@@ -56,4 +56,59 @@ class Solution:
 
 
 
+# Or we could still use sliding windows
+# The tricky is, the candidate substring can only contain [1~26] different letters
+# so we could add a extra constrain on each seach iteration
+# The number of distinct letters
+# and do such sort of search 26 times
+# It is unnecessary loop 26 times, considering the s may contain less distinct letters
 
+class Solution:
+    def longestSubstring(self, s: str, k: int) -> int:
+        n = len(s)
+        counter = [0] * 26
+        ans = 0
+
+        for c in s:
+            idx = ord(c) - ord("a")
+            if counter[idx] == 0:
+                counter[idx] += 1
+
+        maxLetter = sum(counter)
+
+        for maxL in range(1, maxLetter + 1):
+            count = [0] * 26
+            left = right = 0
+            inLetter = 0
+            validL = 0
+            while right < n:
+                curL = s[right]
+                idx = ord(curL) - ord("a")
+                count[idx] += 1
+
+                # if the cnt of curL is 1, in-window letter += 1
+                if count[idx] == 1:
+                    inLetter += 1
+                # if the cnt of curL is k, then validL += 1
+                if count[idx] == k:
+                    validL += 1
+
+                # move left end base on the inequation maxL > inLetter
+                while inLetter > maxL:
+                    rightIdx = ord(s[left]) - ord("a")
+                    if count[rightIdx] == 1:
+                        inLetter -= 1
+                    if count[rightIdx] == k:
+                        validL -= 1   
+                    count[rightIdx] -= 1
+
+                    left += 1
+
+                # if validL == inLetter, the substring in the window is one of potential answer
+                if validL == inLetter:
+                    ans = max(ans, right - left + 1)
+
+                right += 1
+
+
+        return ans
