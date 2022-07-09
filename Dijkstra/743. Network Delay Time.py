@@ -28,7 +28,7 @@ class Myheap:
         return len(self._data)
 
     def getTop(self):
-        return self._data[0]
+        return self._data[0][2]
 
     def push(self, item):
         heappush(self._data, (self.key(item), self.index, item))
