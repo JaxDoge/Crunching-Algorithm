@@ -1,6 +1,4 @@
-648. Replace Words
-
-
+211. Design Add and Search Words Data Structure
 
 
 
@@ -203,24 +201,21 @@ class TrieMap:
     def size(self):
         return self.size
 
+class WordDictionary:
+
+    def __init__(self):
+        self.treeMap = TrieMap()
+
+    def addWord(self, word: str) -> None:
+        self.treeMap.put(word, object())
 
 
-class Solution:
-    def replaceWords(self, dictionary: List[str], sentence: str) -> str:
-        treeMap = TrieMap()
+    def search(self, word: str) -> bool:
+        return self.treeMap.hasKeyWithPattern(word)
 
-        words = sentence.split(" ")
-        res = []
 
-        for root in dictionary:
-            treeMap.put(root, object())
 
-        for w in words:
-            sp = treeMap.shortestPrefixOf(w)
-            if sp:
-                res.append(sp)
-            else:
-                res.append(w)
-
-        return " ".join(res)
-
+# Your WordDictionary object will be instantiated and called as such:
+# obj = WordDictionary()
+# obj.addWord(word)
+# param_2 = obj.search(word)
