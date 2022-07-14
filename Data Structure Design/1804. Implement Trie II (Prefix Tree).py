@@ -1,13 +1,8 @@
-720. Longest Word in Dictionary
+1804. Implement Trie II (Prefix Tree)
 
 
 
 
-# Lexicographical tree
-# String Hash? double hash?
-
-
-# Trie Tree
 R = 26
 
 class TrieNode:
@@ -18,33 +13,24 @@ class TrieNode:
 class TrieMap:
     def __init__(self):
         self.size = 0
-        self.root = None
+        self.root = TrieNode()
 
     # create / update
     def put(self, key, val):
-        if not self.containsKey(key):
-            self.size += 1
-        self.root = self.putHelper(self.root, key, val, 0)
-
-    def putHelper(self, node, key, val, idx):
-        if not node:
-            node = TrieNode()
-
-        # Base case
-        if idx == len(key):
-            node.val = val
-            return node
-
-        c = key[idx]
-        node.children[ord(c) - ord("a")] = self.putHelper(node.children[ord(c) - ord("a")], key, val, idx + 1)
-        return node
+        p = self.root
+        for c in key:
+            cIdx = ord(c) - ord("a")
+            if p.children[cIdx] is None:
+                p.children[cIdx] = TrieNode()
+            p = p.children[cIdx]
+        p.val = val
 
     # delete key
     def remove(self, key):
         if not self.containsKey(key):
             return
 
-        self.root = self.removeHelper(self.root, key, idx)
+        self.root = self.removeHelper(self.root, key, 0)
         self.size -= 1
 
     def removeHelper(self, node, key, idx):
@@ -61,7 +47,7 @@ class TrieMap:
             node.children[ord(c) - ord("a")] = self.removeHelper(node.children[ord(c) - ord("a")], key, idx + 1)
 
         # decide if node need be deleted
-        if node.val:
+        if node.val or node == self.root:
             return node
 
         for c in range(R):
@@ -203,32 +189,46 @@ class TrieMap:
             return self.hkwpTraverse(node.children[ord(c) - ord("a")], pattern, idx + 1)
 
 
-class Solution:
-    def longestWord(self, words: List[str]) -> str:
-        treeMap = TrieMap()
-        for w in words:
-            treeMap.put(w, object())
-
-        root = treeMap.root
-        ans = ""
-
-        def dfs(node, path):
-            nonlocal ans
-            if len(path) > len(ans):
-                ans = "".join(path)
-
-            for c, child in enumerate(node.children):
-                if child is not None and child.val is not None:
-                    path.append(chr(c + ord("a")))
-                    dfs(child, path)
-                    path.pop()
-
-            return
-
-        dfs(root, [])
-
-        return ans
+    def getSize(self):
+        return self.size
 
 
+class Trie:
 
-        
+    def __init__(self):
+        self.treeMap = TrieMap()
+
+    def insert(self, word: str) -> None:
+        if not self.treeMap.containsKey(word):
+            self.treeMap.put(word, 1)
+        else:
+            self.treeMap.put(word, self.treeMap.get(word) + 1)
+
+
+    def countWordsEqualTo(self, word: str) -> int:
+        return self.treeMap.get(word) if self.treeMap.get(word) is not None else 0
+
+
+    def countWordsStartingWith(self, prefix: str) -> int:
+        res = 0
+        for key in self.treeMap.keyWithPrefix(prefix):
+            res += self.treeMap.get(prefix)
+        return res
+
+
+    def erase(self, word: str) -> None:
+        freq = self.treeMap.get(word)
+        if freq == 1:
+            self.treeMap.remove(word)
+        else:
+            freq -= 1
+            self.treeMap.put(word, freq)
+
+
+
+# Your Trie object will be instantiated and called as such:
+# obj = Trie()
+# obj.insert(word)
+# param_2 = obj.countWordsEqualTo(word)
+# param_3 = obj.countWordsStartingWith(prefix)
+# obj.erase(word)

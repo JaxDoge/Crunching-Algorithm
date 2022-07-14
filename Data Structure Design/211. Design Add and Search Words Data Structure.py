@@ -30,7 +30,7 @@ class TrieMap:
         if not self.containsKey(key):
             return
 
-        self.root = self.removeHelper(self.root, key, idx)
+        self.root = self.removeHelper(self.root, key, 0)
         self.size -= 1
 
     def removeHelper(self, node, key, idx):
@@ -189,7 +189,7 @@ class TrieMap:
             return self.hkwpTraverse(node.children[ord(c) - ord("a")], pattern, idx + 1)
 
 
-    def size(self):
+    def getSize(self):
         return self.size
 
 class WordDictionary:

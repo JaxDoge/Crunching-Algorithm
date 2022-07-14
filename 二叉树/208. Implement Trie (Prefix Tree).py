@@ -17,7 +17,7 @@ class TrieMap:
     def put(self, key, val):
         if not self.containsKey(key):
             self.size += 1
-            self.root = self.putHelper(self.root, key, val, 0)
+        self.root = self.putHelper(self.root, key, val, 0)
 
     def putHelper(self, node, key, val, idx):
         if not node:
@@ -37,7 +37,7 @@ class TrieMap:
         if not self.containsKey(key):
             return
 
-        self.root = self.removeHelper(self.root, key, idx)
+        self.root = self.removeHelper(self.root, key, 0)
         self.size -= 1
 
     def removeHelper(self, node, key, idx):
@@ -87,7 +87,7 @@ class TrieMap:
     def hasKeyWithPrefix(self, prefix):
         return self.getNode(self.root, prefix) is not None
 
-    def shortestPrefixOf(query):
+    def shortestPrefixOf(self, query):
         p = self.root
         for i in range(len(query)):
             if not p:
@@ -104,7 +104,7 @@ class TrieMap:
 
         return ""
 
-    def longestPrefixOf(query):
+    def longestPrefixOf(self, query):
         p = self.root
         maxLen = 0
 
@@ -169,8 +169,8 @@ class TrieMap:
                 path.pop()
 
         else:
-            path.append(chr(c + ord("a")))
-            self.kwPaTraverse(nod.children[c], path, pattern, idx + 1, res)
+            path.append(c)
+            self.kwPaTraverse(nod.children[ord(c) - ord("a")], path, pattern, idx + 1, res)
             path.pop()
 
     def hasKeyWithPattern(self, pattern):
@@ -193,10 +193,10 @@ class TrieMap:
             return False
 
         else:
-            return self.hkwpTraverse(node.children[c], pattern, idx + 1)
+            return self.hkwpTraverse(node.children[ord(c) - ord("a")], pattern, idx + 1)
 
 
-    def size(self):
+    def getSize(self):
         return self.size
 
 
@@ -208,7 +208,7 @@ class Trie:
 
 
     def insert(self, word: str) -> None:
-        self.tmap.put(word, 0)
+        self.tmap.put(word, object())
 
 
     def search(self, word: str) -> bool:

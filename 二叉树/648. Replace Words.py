@@ -21,7 +21,7 @@ class TrieMap:
     def put(self, key, val):
         if not self.containsKey(key):
             self.size += 1
-            self.root = self.putHelper(self.root, key, val, 0)
+        self.root = self.putHelper(self.root, key, val, 0)
 
     def putHelper(self, node, key, val, idx):
         if not node:
