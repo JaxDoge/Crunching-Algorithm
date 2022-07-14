@@ -23,6 +23,8 @@ class TrieMap:
             if p.children[cIdx] is None:
                 p.children[cIdx] = TrieNode()
             p = p.children[cIdx]
+        if p.val is None:
+            self.size += 1
         p.val = val
 
     # delete key
