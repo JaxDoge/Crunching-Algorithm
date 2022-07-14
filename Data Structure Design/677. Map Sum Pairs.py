@@ -1,4 +1,4 @@
-211. Design Add and Search Words Data Structure
+677. Map Sum Pairs
 
 
 
@@ -23,6 +23,8 @@ class TrieMap:
             if p.children[cIdx] is None:
                 p.children[cIdx] = TrieNode()
             p = p.children[cIdx]
+        if p.val is None:
+            self.size += 1
         p.val = val
 
     # delete key
@@ -192,64 +194,28 @@ class TrieMap:
     def getSize(self):
         return self.size
 
-class WordDictionary:
+
+class MapSum:
 
     def __init__(self):
         self.treeMap = TrieMap()
 
-    def addWord(self, word: str) -> None:
-        self.treeMap.put(word, object())
 
-
-    def search(self, word: str) -> bool:
-        return self.treeMap.hasKeyWithPattern(word)
+    def insert(self, key: str, val: int) -> None:
+        self.treeMap.put(key, val)
 
 
 
-# Your WordDictionary object will be instantiated and called as such:
-# obj = WordDictionary()
-# obj.addWord(word)
-# param_2 = obj.search(word)
+    def sum(self, prefix: str) -> int:
+        res = 0
+        for key in self.treeMap.keyWithPrefix(prefix):
+            res += self.treeMap.get(key)
+
+        return res
 
 
 
-# 
-
-class TrieNode:
-    def __init__(self):
-        self.children = [None] * 26
-        self.isEnd = False
-
-    def insert(self, word: str) -> None:
-        node = self
-        for ch in word:
-            ch = ord(ch) - ord('a')
-            if not node.children[ch]:
-                node.children[ch] = TrieNode()
-            node = node.children[ch]
-        node.isEnd = True
-
-
-class WordDictionary:
-    def __init__(self):
-        self.trieRoot = TrieNode()
-
-    def addWord(self, word: str) -> None:
-        self.trieRoot.insert(word)
-
-    def search(self, word: str) -> bool:
-        def dfs(index: int, node: TrieNode) -> bool:
-            if index == len(word):
-                return node.isEnd
-            ch = word[index]
-            if ch != '.':
-                child = node.children[ord(ch) - ord('a')]
-                if child is not None and dfs(index + 1, child):
-                    return True
-            else:
-                for child in node.children:
-                    if child is not None and dfs(index + 1, child):
-                        return True
-            return False
-
-        return dfs(0, self.trieRoot)
+# Your MapSum object will be instantiated and called as such:
+# obj = MapSum()
+# obj.insert(key,val)
+# param_2 = obj.sum(prefix)
