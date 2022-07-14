@@ -1,5 +1,10 @@
-211. Design Add and Search Words Data Structure
+720. Longest Word in Dictionary
 
+
+
+
+# Lexicographical tree
+# String Hash? double hash?
 
 
 # Trie Tree
@@ -13,17 +18,26 @@ class TrieNode:
 class TrieMap:
     def __init__(self):
         self.size = 0
-        self.root = TrieNode()
+        self.root = None
 
     # create / update
     def put(self, key, val):
-        p = self.root
-        for c in key:
-            cIdx = ord(c) - ord("a")
-            if p.children[cIdx] is None:
-                p.children[cIdx] = TrieNode()
-            p = p.children[cIdx]
-        p.val = val
+        if not self.containsKey(key):
+            self.size += 1
+            self.root = self.putHelper(self.root, key, val, 0)
+
+    def putHelper(self, node, key, val, idx):
+        if not node:
+            node = TrieNode()
+
+        # Base case
+        if idx == len(key):
+            node.val = val
+            return node
+
+        c = key[idx]
+        node.children[ord(c) - ord("a")] = self.putHelper(node.children[ord(c) - ord("a")], key, val, idx + 1)
+        return node
 
     # delete key
     def remove(self, key):
@@ -189,67 +203,32 @@ class TrieMap:
             return self.hkwpTraverse(node.children[ord(c) - ord("a")], pattern, idx + 1)
 
 
-    def size(self):
-        return self.size
+class Solution:
+    def longestWord(self, words: List[str]) -> str:
+        treeMap = TrieMap()
+        for w in words:
+            treeMap.put(w, object())
 
-class WordDictionary:
+        root = treeMap.root
+        ans = ""
 
-    def __init__(self):
-        self.treeMap = TrieMap()
+        def dfs(node, path):
+            nonlocal ans
+            if len(path) > len(ans):
+                ans = "".join(path)
 
-    def addWord(self, word: str) -> None:
-        self.treeMap.put(word, object())
+            for c, child in enumerate(node.children):
+                if child is not None and child.val is not None:
+                    path.append(chr(c + ord("a")))
+                    dfs(child, path)
+                    path.pop()
 
+            return
 
-    def search(self, word: str) -> bool:
-        return self.treeMap.hasKeyWithPattern(word)
+        dfs(root, [])
 
-
-
-# Your WordDictionary object will be instantiated and called as such:
-# obj = WordDictionary()
-# obj.addWord(word)
-# param_2 = obj.search(word)
-
-
-
-# 
-
-class TrieNode:
-    def __init__(self):
-        self.children = [None] * 26
-        self.isEnd = False
-
-    def insert(self, word: str) -> None:
-        node = self
-        for ch in word:
-            ch = ord(ch) - ord('a')
-            if not node.children[ch]:
-                node.children[ch] = TrieNode()
-            node = node.children[ch]
-        node.isEnd = True
+        return ans
 
 
-class WordDictionary:
-    def __init__(self):
-        self.trieRoot = TrieNode()
 
-    def addWord(self, word: str) -> None:
-        self.trieRoot.insert(word)
-
-    def search(self, word: str) -> bool:
-        def dfs(index: int, node: TrieNode) -> bool:
-            if index == len(word):
-                return node.isEnd
-            ch = word[index]
-            if ch != '.':
-                child = node.children[ord(ch) - ord('a')]
-                if child is not None and dfs(index + 1, child):
-                    return True
-            else:
-                for child in node.children:
-                    if child is not None and dfs(index + 1, child):
-                        return True
-            return False
-
-        return dfs(0, self.trieRoot)
+        
