@@ -22,3 +22,7 @@ class Solution:
             for j in vals[target-nums[i]]:
                 return [i, j]
             vals[cur].append(i)
+
+
+
+# 2022 7 16 review 1
