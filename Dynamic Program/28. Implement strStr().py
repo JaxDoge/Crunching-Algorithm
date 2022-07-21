@@ -23,5 +23,5 @@ class Solution:
     	for i in range(n):
     		J = dp[J][ord(haystack[i])]
     		if J == m:
-    			return i
+    			return i - m + 1
     	return -1
