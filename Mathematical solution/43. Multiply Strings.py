@@ -31,3 +31,84 @@ class Solution:
 
 
 
+# Not sure if it is the best way
+# DFS
+class Solution:
+    def multiply(self, num1: str, num2: str) -> str:
+        if num1 == "0" or num2 == "0":  
+            return "0"
+
+        n = len(num1)
+        m = len(num2)
+        from collections import deque
+
+        def singleProduct(p2, ansP):
+            nonlocal num1, num2, n, m
+
+            if p2 >= m:
+                return ansP
+
+            curMul = int(num2[p2])
+            p1 = n - 1
+            carry = 0
+            curProd = deque()
+            while p1 >= 0:
+                product = int(num1[p1]) * curMul + carry
+                if product > 9:
+                    carry = product // 10
+                else:
+                    carry = 0
+                curProd.appendleft(product % 10)
+                p1 -= 1
+            
+            if carry != 0:
+                curProd.appendleft(carry)
+            
+            if not ansP:
+                return singleProduct(p2 + 1, curProd)
+            
+            ansP.append(0)
+            tmp = deque()
+            i = len(ansP) - 1
+            j = len(curProd) - 1
+            
+            carry = 0
+            while i >= 0 and j >= 0:
+                sumup = ansP[i] + curProd[j] + carry
+                if sumup > 9:
+                    carry = 1
+                else:
+                    carry = 0
+                tmp.appendleft(sumup % 10)
+                i -= 1
+                j -= 1
+            
+            while i >= 0:
+                sumup = ansP[i] + carry
+                if sumup > 9:
+                    carry = 1
+                else:
+                    carry = 0
+                tmp.appendleft(sumup % 10)     
+                i -= 1   
+
+            while j >= 0:
+                sumup = curProd[j] + carry
+                if sumup > 9:
+                    carry = 1
+                else:
+                    carry = 0
+                tmp.appendleft(sumup % 10)     
+                j -= 1
+
+            if carry != 0:
+                tmp.appendleft(carry)    
+            
+            if p2 == m - 1:
+                return tmp
+            
+            return singleProduct(p2 + 1, tmp)
+
+        ans = singleProduct(0, deque())
+        return "".join([str(x) for x in ans])
+

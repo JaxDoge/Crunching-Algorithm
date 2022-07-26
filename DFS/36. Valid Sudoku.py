@@ -6,7 +6,7 @@ class Solution:
         # Using Three high dimension list to record the count of each number in each row, column and subsquare
         row_counter = [[0] * 9 for _ in range(9)]
         col_counter = [[0] * 9 for _ in range(9)]
-        sq_counter = [[[0] * 9 for _ in range(9)] for _ in range(9)]
+        sq_counter = [[[0] * 9 for _ in range(3)] for _ in range(3)]
 
         for i in range(9):
             for j in range(9):

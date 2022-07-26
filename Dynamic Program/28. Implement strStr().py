@@ -13,6 +13,7 @@ class Solution:
     	dp[0][ord(needle[0])] = 1
 
     	X = 0
+        # Note that j start from index 1
     	for j in range(1, m):
     		for c in range(0, 256):
     			dp[j][c] = dp[X][c]
