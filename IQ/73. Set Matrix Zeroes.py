@@ -2,7 +2,8 @@
 
 
 # O(1) extra space complexity
-# Using
+# Using the first row and first column to mark if the whole row or column shuold be set to zero
+# Using another two varible to mark if the first row and first column should be set to zero originally.
 class Solution:
     def setZeroes(self, matrix: List[List[int]]) -> None:
         """
