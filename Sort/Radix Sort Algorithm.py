@@ -164,6 +164,7 @@ def buildSuffixArray(txt, n):
         # Assign next rank to every suffix
         for i in range(n):
             nextindex = suffixes[i].index + k // 2
+            # With ind array, we could find the nextRank of the nextIdx in O(1) time
             suffixes[i].rank[1] = suffixes[ind[nextindex]].rank[0] \
                 if (nextindex < n) else -1
  
@@ -214,7 +215,7 @@ def countingSort(array, maxN, rk):
 
 def radixSort(array):
     # sort rank1 then sort rank0
-    maxRank = 26
+    maxRank = 27 if len(array) < 27 else len(array)
     countingSort(array, maxRank, 1)
     countingSort(array, maxRank, 0)
     return
