@@ -7,7 +7,7 @@ class Solution:
     def minimumDeviation(self, nums: List[int]) -> int:
         queue = SortedList()
         for num in nums:
-            if nums % 2 == 1:
+            if num % 2 == 1:
                 queue.add(num * 2)
             else:
                 queue.add(num)
