@@ -45,7 +45,7 @@ class Solution:
 
             # the right end become the new left end
             left = right
-            # j + 1 become the start of the next
+            # j + 1 become the start of the next segment
             i = j + 1
 
         return ''.join(dList)
