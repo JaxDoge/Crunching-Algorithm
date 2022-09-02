@@ -23,3 +23,6 @@ class Solution:
 
         nums.sort()
         return bisect_left(range(nums[-1] - nums[0]), k, key=count)
+
+
+# 10. Or we could use double points to find each j, i in O(n) time
