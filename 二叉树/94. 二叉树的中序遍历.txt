@@ -1,0 +1,72 @@
+94. 二叉树的中序遍历
+
+Note:
+1. 同一个实例会被测试多次，最好不要定义全局变量
+2. 递归函数内部赋值 res ，每层递归 res 会被重置，所以返回值需要记录
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+# tn1 = TreeNode(1)
+# tn1.right = TreeNode(2)
+# tn1.right.left = TreeNode(3)
+
+# class Solution:
+    
+#     def inorderTraversal(self, root: TreeNode) -> List[int]:
+#         # 递归写法
+#         res = []   # 递归退出条件
+#         if not root:
+#             return []
+#         res += self.inorderTraversal(root.left)
+#         res.append(root.val)
+#         res += self.inorderTraversal(root.right)
+#         return res
+
+# #迭代解法
+# 紫金解法，通用三种遍历方式，灵活利用了  TreeNode 和 int 两种不同的类型做为 flag，在一个栈中压入2个类型的变量
+# class Solution:
+#     def inorderTraversal(self, root: TreeNode):
+#         stack = [root]
+#         rst = []
+#         while stack:
+#             i = stack.pop()
+#             if isinstance(i, TreeNode):
+#                 stack.extend([i.right,i.val,i.left])
+#             elif isinstance(i, int):
+#                 rst.append(i)
+#         return rst
+
+# Morris 解法
+class Solution:
+    def inorderTraversal(self, root: TreeNode):
+    	res = []
+    	predecessor = None
+
+    	while root:
+    		if not root.left:
+    			res += [root.val]
+    			root = root.right
+    		else:
+    			# Looking for predecessor
+    			# A step towards left
+    			predecessor = root.left
+
+    			# iteratively stepping to right
+    			while predecessor.right and predecessor.right != root:
+    				predecessor = predecessor.right
+
+    			# If predecessor's right is empty, add dummy link
+    			if not predecessor.right:
+    				predecessor.right = root
+    				root = root.left
+    			else:
+    				res += [root.val]
+    				root = root.right
+    				predecessor = None
+    	return res
