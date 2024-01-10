@@ -24,7 +24,7 @@ class Solution:
         res = []
 
         def backtrack(index):
-            # bascase
+            # basecase
             if index == n:
                 res.append("".join(cmb))
                 return

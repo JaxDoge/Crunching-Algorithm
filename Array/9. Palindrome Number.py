@@ -13,7 +13,7 @@ class Solution:
         tmp = x
         help_stack = deque()
         while True:
-            help_stack.append(tmp mod divisor)
+            help_stack.append(tmp % divisor)
             tmp = tmp // divisor
             if tmp == 0:
                 break

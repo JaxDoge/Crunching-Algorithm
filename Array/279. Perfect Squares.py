@@ -27,3 +27,25 @@ class Solution:
     				distance[popval-ps] = distance[popval]+1
 
     	return 0
+
+
+
+# Dynamic Programming
+class Solution2:
+    def numSquares(self, n: int) -> int:
+        perfect_max = int(n ** 0.5)
+        dp_table = [[0] * (n + 1) for _ in range(perfect_max + 1)]
+
+        for j in range(1, n + 1):
+            dp_table[1][j] = j
+
+        for i in range(2, perfect_max + 1):
+            for j in range(1, n + 1):
+                square_num = i**2
+                max_choice = j // square_num
+                dp_table[i][j] = dp_table[i - 1][j]
+
+                for x in range(1, max_choice + 1):
+                    dp_table[i][j] = min(dp_table[i][j], dp_table[i - 1][j - square_num * x] + x)
+
+        return dp_table[perfect_max][n]
