@@ -38,3 +38,23 @@ class Solution:
 
 # Follow up: Can you solve the problem in O(1) extra space complexity? (The output array does not count as extra space for space complexity analysis.)
 
+# Using answer list as the left_prod and calculate right_prod on the fly
+
+class Solution:
+	def productExceptSelf(self, nums: List[int]) -> List[int]:
+		n = len(nums)
+		answer = [0] * n
+
+		answer[0] = 1
+		for i in range(1, n):
+			j = i - 1
+			answer[i] = answer[j] * nums[j]
+
+		right_prod = 1
+		for i in range(n - 1, -1, -1):
+			if i < n - 1:
+				right_prod = right_prod * nums[i + 1]			
+			answer[i] = answer[i] * right_prod
+
+		return answer
+
