@@ -1,27 +1,30 @@
 560. Subarray Sum Equals K
 
 
+# Note the left presum array has presum[j] - presum[i] = sum(nums[i+1...j]), i<j
+# So if we know the rest = presum[j] - k has appeared before (along with the appearance), we can update the result
+# Need a hashmap to count all previous presum appearance
+# Update the hashmap counter on the fly
+
+
 class Solution:
-    def subarraySum(self, nums: List[int], k: int) -> int:
-    	n = len(nums)
+	def subarraySum(self, nums: List[int], k: int) -> int:
+		n = len(nums)
 
-    	# Use a hashmap to record the appearances of a presum
-    	presum_dict = dict()
+		# Empty subarray only appear once, to match nums[i] == k
+		presum_hashmap = dict({0:1})
 
-    	# base case
-    	res = 0
-    	sum_0_i = 0
-    	presum_dict.update({0:1})
+		res = 0
 
+		presum = 0
 
-    	for i in range(n):
-    		sum_0_i += nums[i]
-    		# the presum that could meet the requirement
-    		sum_0_j = sum_0_i - k
-    		# if we recorded the presum previously, add the count to the res
-    		if sum_0_j in presum_dict:
-    			res += presum_dict[sum_0_j]
-    		# update the presum dictionary
-    		presum_dict.update({sum_0_i:presum_dict.get(sum_0_i,0)})
+		for i in range(n):
+			presum += nums[i]
+			rest = presum - k
+			if rest in presum_hashmap:
+				res += presum_hashmap[rest]
 
-    	return res
+			# update the hashmap, appearance + 1
+			presum_hashmap.update({presum:presum_hashmap.get(presum, 0) + 1})
+
+		return res
