@@ -1,0 +1,147 @@
+3721. Longest Balanced Subarray II
+
+# This one derive from basic update value
+class LazyTag:
+	def __init__(self):
+		self.to_add = 0
+	def add(self, other: LazyTag):
+		self.to_add += other.to_add
+	def has_tag(self):
+		return self.to_add != 0
+	def clear(self):
+		self.to_add = 0
+
+# This one derive from basic segment critical value (like sum)
+# Combined with basic lazy array
+class SegmentTreeNode:
+	def __init__(self):
+		self.min_value = 0
+		self.max_value = 0
+		self.lazy_tag = LazyTag()
+
+
+
+class SegmentTree:
+	def __init__(self, data):
+		self.n = len(data)
+		self.tree = [SegmentTreeNode() for _ in range(4 * self.n + 1)]
+		self._build(data, 1, self.n, 1)
+
+	def _push_up(self, i):
+		self.tree[i].min_value = min(
+			self.tree[i >> 1].min_value, self.tree[(i >> 1) | 1].min_value
+			)
+		self.tree[i].max_value = max(
+			self.tree[i >> 1].min_value, self.tree[(i >> 1) | 1].max_value
+			)
+
+	def _build(self, data, l, r, i):
+		# base case: the leaf node value is equal to data[l -1]
+		if l == r:
+			tree[i].min_value = data[l - 1]
+			tree[i].max_value = data[l - 1]
+			return
+		# Otherwise, bisect the range
+		mid = l + ((r - l) >> 1)
+		self._build(data, l, mid, i << 1)
+		self._build(data, mid + 1, r, (i << 1) | 1)
+
+		# Children nodes are built, now merge to this parent node
+		self._push_up(i)
+
+	def _apply_lazytag(self, tag, i):
+		self.tree[i].min_value += tag.to_add
+		self.tree[i].max_value += tagto_add
+		self.tree[i].lazy_tag.add(tag)
+
+	def _pushdown(self, i):
+		if self.tree[i].lazy_tag.has_tag():
+			tag = self.tree[i].lazy_tag
+
+			self._apply_lazytag(tag, i << 1)
+			self._apply_lazytag(tag, (i << 1) | 1)
+			self.tree[i].lazy_tag.clear()
+
+
+	def _update(self, tag: LazyTag, tl, tr, l, r, i):
+		# base case, the node range is encompassed by the target range
+		# Update the min, max and lazy tag
+		if tl <= l and r >= tr:
+			self._apply_lazytag(tag, i)
+			return
+
+		# Otherwise we need to update the child nodes first
+		# Check if there is previous lazy tag already in the parent node, push it to children
+		self._pushdown(i)
+
+		mid = l + ((r - l) >> 1)
+		# update left child if needed
+		if tl <= mid:
+			self._update(tag, tl, tr, l, mid, i << 1)
+		# update right child if needed
+		if mid + 1 <= tr:
+			self._update(tag, tl, tr, mid + 1, r, (i << 1) | 1)
+
+		# For now at least one child is update, we need to push up the update to parent noded
+		self._push_up(i)
+
+	# Given a range, find the rightmost `value` position
+	def _find(self, val, tl, tr, l, r, i):
+		# base case 1, value is not in the range
+		if val < self.tree[i].min_value or self.tree[i].max_value < val:
+			return -1
+
+		# base case 2, find the value
+		if l == r:
+			return l
+
+		# not leaf node, search child nodes
+		self._pushdown(i)
+
+		mid = l + ((r - l) >> 1)
+		# we need rightmost position, so start from right child, return if found
+		# search range overlap with right child
+		if mid + 1 <= tr and r >= tl:
+			res = self._find(val, tl, tr, mid + 1, r, (i << 1) | 1)
+			if res != -1:
+				return res
+
+		# else check left child
+		if l <= tr and mid >= tl:
+			return self._find(val, tl, tr, l, mid, i << 1)
+
+		# Only for defensive, shouldn't be touched
+		return -1
+
+
+
+class Solution:
+	def longestBalanced(self, nums: List[int]) -> int:
+		occurrences = defaultdict(deque)
+
+		def sgn(x):
+			return 1 if x % 2 == 0 else -1
+
+		length = 0
+		prefix_sum = [0] * len(nums)
+		prefix_sum[0] = sgn(nums[0])
+		occurrences[nums[0]].append(1)
+
+		for i in range(1, len(nums)):
+			prefix_sum[i] = prefix_sum[i - 1]
+			occ = occurrences[nums[i]]
+			if not occ:
+				prefix_sum[i] += sgn(nums[i])
+			occ.append(i + 1)
+
+		seg = SegmentTree(prefix_sum)
+		for i in range(len(nums)):
+			length = max(length, seg.find_last(i + length, 0) - i)
+			next_pos = len(nums) + 1
+			occurrences[nums[i]].popleft()
+			if occurrences[nums[i]]:
+				next_pos = occurrences[nums[i]][0]
+
+			seg.add(i + 1, next_pos - 1, -sgn(nums[i]))
+
+		return length
