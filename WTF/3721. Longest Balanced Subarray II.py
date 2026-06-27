@@ -29,17 +29,17 @@ class SegmentTree:
 
 	def _push_up(self, i):
 		self.tree[i].min_value = min(
-			self.tree[i >> 1].min_value, self.tree[(i >> 1) | 1].min_value
+			self.tree[i << 1].min_value, self.tree[(i << 1) | 1].min_value
 			)
 		self.tree[i].max_value = max(
-			self.tree[i >> 1].min_value, self.tree[(i >> 1) | 1].max_value
+			self.tree[i << 1].max_value, self.tree[(i << 1) | 1].max_value
 			)
 
 	def _build(self, data, l, r, i):
 		# base case: the leaf node value is equal to data[l -1]
 		if l == r:
-			tree[i].min_value = data[l - 1]
-			tree[i].max_value = data[l - 1]
+			self.tree[i].min_value = data[l - 1]
+			self.tree[i].max_value = data[l - 1]
 			return
 		# Otherwise, bisect the range
 		mid = l + ((r - l) >> 1)
@@ -51,7 +51,7 @@ class SegmentTree:
 
 	def _apply_lazytag(self, tag, i):
 		self.tree[i].min_value += tag.to_add
-		self.tree[i].max_value += tagto_add
+		self.tree[i].max_value += tag.to_add
 		self.tree[i].lazy_tag.add(tag)
 
 	def _pushdown(self, i):
@@ -66,7 +66,7 @@ class SegmentTree:
 	def _update(self, tag: LazyTag, tl, tr, l, r, i):
 		# base case, the node range is encompassed by the target range
 		# Update the min, max and lazy tag
-		if tl <= l and r >= tr:
+		if tl <= l and r <= tr:
 			self._apply_lazytag(tag, i)
 			return
 
@@ -113,35 +113,70 @@ class SegmentTree:
 		# Only for defensive, shouldn't be touched
 		return -1
 
+	def add(self, val, tl, tr):
+		tag = LazyTag()
+		tag.to_add = val
+		if tl <= tr:
+			self._update(tag, tl, tr, 1, self.n, 1)
+
+    # Find the rightmost val position in range [start, n]
+	def find_last(self, start, val):
+		if start > self.n:
+			return -1
+		return self._find(val, start, self.n, 1, self.n, 1)
+
 
 
 class Solution:
 	def longestBalanced(self, nums: List[int]) -> int:
-		occurrences = defaultdict(deque)
 
-		def sgn(x):
+		n = len(nums)
+
+		# Need a dict to record the occurrence position of each number
+		occur_map = defaultdict(deque)
+		res = 0
+
+		def sign(x):
 			return 1 if x % 2 == 0 else -1
 
-		length = 0
-		prefix_sum = [0] * len(nums)
-		prefix_sum[0] = sgn(nums[0])
-		occurrences[nums[0]].append(1)
+		pre_sum = [0] * n
+		# Initial first element in presum array and occurrence map
+		pre_sum[0] = sign(nums[0])
+		occur_map[nums[0]].append(1)
 
-		for i in range(1, len(nums)):
-			prefix_sum[i] = prefix_sum[i - 1]
-			occ = occurrences[nums[i]]
+		for i in range(1, n):
+			pre_sum[i] = pre_sum[i - 1]
+
+			occ = occur_map[nums[i]]
+			# if the number never appear before
 			if not occ:
-				prefix_sum[i] += sgn(nums[i])
+				pre_sum[i] += sign(nums[i])
+
 			occ.append(i + 1)
 
-		seg = SegmentTree(prefix_sum)
-		for i in range(len(nums)):
-			length = max(length, seg.find_last(i + length, 0) - i)
-			next_pos = len(nums) + 1
-			occurrences[nums[i]].popleft()
-			if occurrences[nums[i]]:
-				next_pos = occurrences[nums[i]][0]
+		# build the tree
+		seg_tree = SegmentTree(pre_sum)
 
-			seg.add(i + 1, next_pos - 1, -sgn(nums[i]))
+		# Search the rightmost zero presum for each given left start point
+		# Note we can pruning the start point since we are looking for the longest subarray
+		for i in range(n):
+			# the .find_last() return the outbound end position, which gives us presum[i, j) == 0, so j - i is the length
+			res = max(res, seg_tree.find_last(i + res, 0) - i)
 
-		return length
+			occur_map[nums[i]].popleft()
+			if occur_map[nums[i]]:
+				next_pos = occur_map[nums[i]][0]
+			else:
+				next_pos = n + 1
+
+			# move out the nums[i] will affect the presum range [i + 1, next nums[i] position - 1]
+			# Or [i + 1, n]
+			seg_tree.add(-sign(nums[i]), i + 1, next_pos - 1)
+
+		return res
+
+
+
+
+
+
