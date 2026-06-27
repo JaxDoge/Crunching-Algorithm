@@ -2,30 +2,28 @@
 
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-    	import collections
-    	window = collections.defaultdict(int)
+        hashmap = defaultdict(int)
+        duplicate_num = 0
+        p1 = 0
+        res = 0
 
-    	# 记录多少个字母有重复
-    	repeat = 0
-    	left = right = 0
-    	ans = 0
+        n = len(s)
 
-    	while right < len(s):
-    		char = s[right]
-    		right += 1
-    		# 判断是否加入后 window 有字符出现频次正好大于1
-    		if window[char] == 1:
-    			repeat += 1
-    		window[char] += 1
+        for p2 in range(n):
+            # put s[p2] in the subarray
+            if hashmap[s[p2]] == 1:
+                duplicate_num += 1
+            hashmap[s[p2]] += 1
 
-    		if repeat == 0 and (right - left) > ans:
-    			ans = right - left
+            # if there is at least one duplicate char, stop extending the window
+            if duplicate_num > 0:
+                if hashmap[s[p1]] == 2:
+                    duplicate_num -= 1
+                hashmap[s[p1]] -= 1
+                p1 += 1
+            
+            if duplicate_num == 0:
+                res = max(res, p2 - p1 + 1)
 
-    		while repeat > 0:
-    			c = s[left]
-    			left += 1
+        return res
 
-    			window[c] -= 1
-    			if window[c] == 1:
-    				repeat -= 1
-    	return ans

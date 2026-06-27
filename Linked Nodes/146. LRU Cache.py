@@ -1,82 +1,67 @@
 146. LRU Cache
 
-class ListNode:
-    def __init__(self, val = 0, key = 0, next: ListNode = None, previous: ListNode = None):
-        self.val = val 
+class Node:
+    def __init__(self, key=0, value=0):
         self.key = key
-        self.next = next 
-        self.previous = previous 
-
+        self.value = value
+        self.prev = None
+        self.next = None
 
 class LRUCache:
 
     def __init__(self, capacity: int):
-        import collections
-        self.size = capacity
-        # The key of dict is the original key, but the value of the dict is the corresponding node
-        self.nodedict = collections.defaultdict(ListNode)   
-        self.dummy_head = ListNode(val = -1)
-        self.dummy_end = ListNode(val = -1)   # Should point to the end of list
-        self.dummy_head.next = self.dummy_end
-        self.dummy_end.previous = self.dummy_head
+        self.capacity = capacity
+        self.hashmap = {}
+        self.head = Node()
+        self.tail = Node()
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def _remove_node(self, node: Node):
+        prev_node = node.prev
+        next_node = node.next
+
+        prev_node.next = next_node
+        next_node.prev = prev_node
+
+    def _append_to_tail(self, node: Node):
+        old_last = self.tail.prev
+        old_last.next = node
+        node.prev = old_last
+
+        self.tail.prev = node
+        node.next = self.tail
 
     def get(self, key: int) -> int:
-        if not key in self.nodedict:
+        if key not in self.hashmap:
             return -1
-        else:
-            get_node = self.nodedict[key]
-            # move the node to the top
-            if self.dummy_head.next != get_node:
-                get_node.previous.next = get_node.next 
-                get_node.next.previous = get_node.previous
 
-                get_node.next = self.dummy_head.next  
-                get_node.previous = self.dummy_head
-                get_node.next.previous = get_node
-                self.dummy_head.next = get_node  
-            return get_node.val
+        node = self.hashmap[key]
 
+        self._remove_node(node)
+        self._append_to_tail(node)
 
+        return node.value
 
-    def put(self, key: int, value: int) -> None:
-        if key in self.nodedict:
-            self.nodedict[key].val = value
-            # 这里也要调整node位置呀！！！！
-            get_node = self.nodedict[key]
-            # move the node to the top
-            if self.dummy_head.next != get_node:
-                get_node.previous.next = get_node.next 
-                get_node.next.previous = get_node.previous
-
-                get_node.next = self.dummy_head.next  
-                get_node.previous = self.dummy_head
-                get_node.next.previous = get_node
-                self.dummy_head.next = get_node              
-            return
-        # create new node at the head
-        new_node = ListNode(val = value, key = key)
-        new_node.next = self.dummy_head.next
-        new_node.previous = self.dummy_head
-        new_node.next.previous = new_node
-        self.dummy_head.next = new_node 
-        # record the new node in the dictionary
-        self.nodedict[key] = new_node  
         
-        #这里的逻辑不专业，应该先判断linkedhashmap 大小，再决定是否删除，再插入新节点
-        if len(self.nodedict) > self.size:
-            # evict the end node
-            end_node = self.dummy_end.previous
-            end_node.previous.next = end_node.next 
-            end_node.next.previous = end_node.previous
-
-            end_node.next = end_node.previous = None 
-            del self.nodedict[end_node.key]
-
+    def put(self, key: int, value: int) -> None:
+        if key in self.hashmap:
+            node = self.hashmap[key]
+            node.value = value
+            self._remove_node(node)
+            self._append_to_tail(node)
             return
 
-        else:
-            return
+        if len(self.hashmap) >= self.capacity:
+            lru_node = self.head.next
 
+            self._remove_node(lru_node)
+            del self.hashmap[lru_node.key]
+        
+        new_node = Node(key, value)
+        self.hashmap[key] = new_node
+        self._append_to_tail(new_node)
+        
 
 
 
