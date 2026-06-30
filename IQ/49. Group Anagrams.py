@@ -35,7 +35,7 @@ class Solution:
 
         return s_counter == t_counter  # Slow!!
 
-
+# The common part of two anagrams is the counter pattern
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         res = collections.defaultdict(list)
