@@ -2,44 +2,38 @@
 
 
 
-# Stack
-class Solution(object):
-    def __init__(self):
-        pass
+class Solution:
+	def decodeString(self, s: str) -> str:
+		n = len(s)
+		stack = deque()
 
-    def decodeString(self, s):
-        """
-        :type s: str
-        :rtype: str
-        """
-        readStack = []
-        p = 0
-        n = len(s)
+		i = n - 1
+		while i >= 0:
+			c = s[i]
 
-        while p < n:
-            # read digit number
-            preNum = 0
-            while s[p].isdecimal():
-                preNum = preNum * 10 + int(s[p])
-                p += 1
+			if c == '[':
+				# Star poping the substring
+				substr = []
+				while True:
+					cur_char = stack.popleft()
+					if cur_char == ']':
+						break
+					substr.append(cur_char)
 
-            if preNum:
-                readStack.append(preNum)
+				# Find the k
+				k = deque()
+				while i - 1 >= 0 and '0' <= s[i - 1] <= '9':
+					k.appendleft(s[i - 1])
+					i -= 1
 
-            if s[p] != "]":
-                readStack.append(s[p])
-            else:
-                # Start decode
-                wordL = []
-                while readStack[-1] != "[":
-                    wordL.append(readStack.pop())
-                readStack.pop()  # pop [
-                wordL.reverse()
-                word = "".join(wordL)
-                word = word * readStack.pop()
-                readStack.append(word)
-            p += 1
+				# decoding
+				decode_substr = int(''.join(k)) * ''.join(substr)
+				stack.appendleft(decode_substr)
 
+			else:
+				stack.appendleft(c)
+			
+			i -= 1
 
-        return "".join(readStack)
+		return ''.join(stack)
 

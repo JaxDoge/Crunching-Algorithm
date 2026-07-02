@@ -2,6 +2,7 @@
 
 
 # Utilize the feature of set to skip non-start point numbers
+# Each element will be visited at most two times (after constructing the set)
 class Solution:
     def longestConsecutive(self, nums: List[int]) -> int:
         longestQ = 0
