@@ -3,15 +3,15 @@
 # Memo + brutal search
 
 class Solution:
-    def trap(self, height: List[int]) -> int:
-    	n = len(height)
-    	# Badcase
-    	if len(height) == 0:
-    		return 0 
-    	res = 0
+	def trap(self, height: List[int]) -> int:
+		n = len(height)
+		# Badcase
+		if len(height) == 0:
+			return 0 
+		res = 0
 
-    	# Using l_Max and r_Max to record the highest pillars of index i to both sides
-    	from collections import deque
+		# Using l_Max and r_Max to record the highest pillars of index i to both sides
+		from collections import deque
 		l_Max = deque([height[0]])
 		r_Max = deque([height[n-1]])
 
@@ -33,31 +33,57 @@ class Solution:
 		return res
 
 
+# Dynamic Programming
+# Much easier to understand
+class Solution:
+	def trap(self, height: List[int]) -> int:
+		n = len(height)
+		if n < 2:
+			return 0
+
+		res = 0
+		left_max = [0] * n
+		right_max = [0] * n
+
+		left_max[0] = height[0]
+		for i in range(1, n):
+			left_max[i] = max(left_max[i - 1], height[i])
+
+		right_max[n - 1] = height[n - 1]
+		for i in range(n - 2, -1, -1):
+			right_max[i] = max(right_max[i + 1], height[i])
+
+		# For each index, the trapped water is depended on current height and the lowest left or right boundary
+		for i in range(n):
+			res += min(left_max[i], right_max[i]) - height[i]
+
+		return res
+
 # Double pointers
 # The key point is for each time, move and calculate the lower side
 # Remember the water volumn decided by the shortest bar.
 # Space compexity is O(1)
 class Solution:
-    def trap(self, height: List[int]) -> int:
-        n = len(height)
-        # Badcase
-        if len(height) == 0:
-            return 0 
-        res = 0
+	def trap(self, height: List[int]) -> int:
+		n = len(height)
+		# Badcase
+		if len(height) == 0:
+			return 0 
+		res = 0
 
-        left = 0
-        right = n - 1
-        l_Max, r_Max = 0, 0
+		left = 0
+		right = n - 1
+		l_Max, r_Max = 0, 0
 
-        while left < right:
-            l_Max = max(l_Max, height[left])
-            r_Max = max(r_Max, height[right])
+		while left < right:
+			l_Max = max(l_Max, height[left])
+			r_Max = max(r_Max, height[right])
 
-            if l_Max < r_Max:
-                res += l_Max - height[left]
-                left += 1
-            else:
-                res += r_Max - height[right]
-                right -= 1
+			if l_Max < r_Max:
+				res += l_Max - height[left]
+				left += 1
+			else:
+				res += r_Max - height[right]
+				right -= 1
 
-        return res
+		return res
