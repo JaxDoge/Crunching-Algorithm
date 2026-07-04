@@ -3,22 +3,25 @@ class Solution:
         from collections import deque
         s = deque(list(s))
         
+        # Calculate each bracket pair
         def sub_calculator(input_deque):
             num = 0 
+            # Post-processing stack. It only has positive or negative numbers
             stack_list = []
             sign = '+'
 
             while len(input_deque) > 0:
                 c = input_deque.popleft()
-                #  left bracket start the recursion, right bracket return the result number
+                # The ifs order is important
+                # left bracket start the recursion, right bracket return the result number
                 if c == '(':
                     num = sub_calculator(input_deque)
 
-                #  convert string to numeric
+                # convert string to numeric
                 if c.isdigit():
                     num = num*10 + int(c)
 
-                #  find sign character or the end of expression
+                # find sign character or the end of expression (end of current number, including trailing spaces)
                 if (not c.isdigit() and c != ' ') or len(input_deque) == 0:
                     if sign == '+':
                         stack_list.append(num)
@@ -31,7 +34,8 @@ class Solution:
                     #  finish sub process
                     num = 0
                     sign = c 
-                #  right bracked is the flag of end recursion
+
+                # right bracket is the flag of end recursion
                 if c == ')':
                     break               
 
