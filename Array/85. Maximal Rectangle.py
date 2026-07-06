@@ -7,6 +7,7 @@ class Solution:
     def maximalRectangle(self, matrix: List[List[str]]) -> int:
         m, n = len(matrix), len(matrix[0])
         # Construct a new matrix to record the number of consecutive ones left hand side of this cell
+        # Simple DP method
         leftMatrix = [[0] * n for _ in range(m)]
         for i in range(m):
             for j in range(n):
@@ -19,6 +20,8 @@ class Solution:
             left = [-1] * m
             right = [m] * m
 
+            # We can also use two monostack to check the range(m) from both side.
+            # This approach only need to iterate once
             monoStack = []
             for i in range(m):
                 while len(monoStack) and leftMatrix[monoStack[-1]][j] >= leftMatrix[i][j]:

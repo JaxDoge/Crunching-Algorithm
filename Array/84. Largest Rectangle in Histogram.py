@@ -1,7 +1,7 @@
 84. Largest Rectangle in Histogram
 
 
-# Monotonous stack
+# Monotonic stack
 # Sentinel
 # Fine the left and right boundary of a rectangle, which has the height of current bar
 from collections import deque
@@ -11,6 +11,8 @@ class Solution:
         left = []  # left boundary of each bar
         right = deque()  # right boundary of each bar
 
+        # For each bar i, find the nearest smaller (not even equal) bar index to the left
+        # if there is none, then set to -1 (can expand to the beginning index)
         mono_stack = []
         for i in range(n):
             while len(mono_stack) and heights[mono_stack[-1]] >= heights[i]:
