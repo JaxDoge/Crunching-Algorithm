@@ -7,7 +7,7 @@ class MonotonicQueue:
     def __init__(self):
         self.linked_list = collections.deque()
 
-    # 队列插入 n 在队尾，保持非严格单调递增
+    # 队列插入 n 在队尾，保持非严格单调递减
     def push(self, n: int):
         while self.linked_list and self.linked_list[-1] < n:
             self.linked_list.pop()
