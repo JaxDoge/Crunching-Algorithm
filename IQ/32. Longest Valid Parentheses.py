@@ -14,6 +14,7 @@ class Solution:
 
         stack_helper = deque()
         # There is always a right parenthese in the bottom of stack, so we put a dummy right one first
+        # The first element is -1 because we need sub_str_len = j - i
         stack_helper.append(-1)
         for i in range(n):
             # left paranthese enter the stack
