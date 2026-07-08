@@ -71,6 +71,7 @@ class LFUCache:
     	if self.cap <= 0: return
 
     	# 若 KEY 已经存在，修改三个字典即可，无容量判断
+        # We can also call get() method here
     	if key in self.key_val:
     		self.key_val[key] = value
     		self.increaseFreq(key)

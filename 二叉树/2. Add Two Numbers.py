@@ -1,5 +1,3 @@
-2. Add Two Numbers
-
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -8,54 +6,48 @@
 
 
 class Solution:
-    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-    	
-    	head = res = ListNode(val = 0)
-    	carry = 0    # Record carry value
-    	while l1 and l2:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        head = curr = ListNode()
+        carry = 0
 
-    		sumup = l1.val + l2.val + carry
-    		carry = 0
-    		l1 = l1.next 
-    		l2 = l2.next 
-    		if sumup > 9:
-    			res.next = ListNode(val = int(sumup % 10))
-    			carry = 1
+        while l1 and l2:
+            sum_up = l1.val + l2.val + carry
 
-    		else:
-    			res.next = ListNode(val = sumup)
-    		res = res.next
+            l1 = l1.next
+            l2 = l2.next
+            carry = 0
 
+            if sum_up > 9:
+                carry = 1
+                curr.next = ListNode(val = sum_up % 10)
+            else:
+                curr.next = ListNode(val = sum_up)
 
-    	if not l1:
-    		while l2:
-    			sumup = l2.val + carry
-    			carry = 0
-    			l2 = l2.next
-	    		if sumup > 9:
-	    			res.next = ListNode(val = int(sumup % 10))
-	    			carry = 1
-	    		else:
-	    			res.next = ListNode(val = sumup)
-	    		res = res.next
+            curr = curr.next
 
-    	if not l2:
-    		while l1:
-    			sumup = l1.val + carry
-    			carry = 0
-    			l1 = l1.next
-	    		if sumup > 9:
-	    			res.next = ListNode(val = int(sumup % 10))
-	    			carry = 1
-	    		else:
-	    			res.next = ListNode(val = sumup)
-	    		res = res.next
-             
-        if carry != 0:
-        	res.next = ListNode(val = carry)
-        	carry = 0
-    	return head.next
+        def one_list(l):
+            nonlocal carry, curr
+            sum_up = l.val + carry
+            l = l.next
+            carry = 0
+
+            if sum_up > 9:
+                carry = 1
+                curr.next = ListNode(val = sum_up % 10)
+            else:
+                curr.next = ListNode(val = sum_up)
+
+            curr = curr.next     
+            return l 
 
 
+        while l2:
+            l2 = one_list(l2)
 
-# 2022 7 16 review
+        while l1:
+            l1 = one_list(l1)
+
+        if carry:
+            curr.next = ListNode(val = carry)
+        
+        return head.next

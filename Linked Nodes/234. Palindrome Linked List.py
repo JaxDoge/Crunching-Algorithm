@@ -18,9 +18,10 @@ class Solution:
         # bad case 2
         if not head.next: return True
         dummy_head = ListNode(val = -1, next = head)
+
+        # With dummy head, we can ensure the q will point to the last node of first segment
         p = q = dummy_head
 
-        # 快慢指针一般写法
         while p and p.next:
             if p.next.next:
                 p = p.next.next 
@@ -30,7 +31,7 @@ class Solution:
         
 
         # 单数情况: q 是中间节点
-        # 双数情况: p 是左半边最后节点
+        # 双数情况: q 是左半边最后节点
 
         q.next = self.subReverse(q.next) 
 
@@ -39,6 +40,7 @@ class Solution:
         left = dummy_head.next
         right = q.next 
 
+        # left may be always valid (odd number)
         while right:
            
             if left.val != right.val:
