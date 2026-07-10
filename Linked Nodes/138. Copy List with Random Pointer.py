@@ -9,6 +9,8 @@ class Node:
         self.random = random
 """
 
+# Zigzag approach
+
 class Solution:
     def copyRandomList(self, head: 'Node') -> 'Node':
     	# Badcase
