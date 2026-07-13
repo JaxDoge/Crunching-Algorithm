@@ -29,15 +29,42 @@ class Solution:
             if left_search_res and right_search_res:
                 return node 
 
-            # Situation 2, 目标节点都没有找到，返回空
-            if not left_search_res and not right_search_res:
-                return None  
-
-            # Situation 3, 目标节点在 left_search_res 或 right_search_res 中有找到
-            # 用找到的那边代替 node 返回，通过这种方式+后序遍历逐层上传搜索到的结果
-            return left_search_res if not right_search_res else right_search_res
+            # Situation 2
+            return left_search_res or right_search_res
         return backorder(root,p,q)
 
 
 
 
+class Solution:
+    def _preorder(self, node, route: list, p, q, p_route, q_route):
+        if not node:
+            return
+
+        route.append(node)
+        if node == p:
+            p_route.extend(route) 
+        if node == q:
+            q_route.extend(route)
+
+        if p_route and q_route:
+            return
+
+        self._preorder(node.left, route, p, q, p_route, q_route)
+        self._preorder(node.right, route, p, q, p_route, q_route)
+
+        route.pop()
+
+
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        p_route = []
+        q_route = []
+
+        self._preorder(root, [], p, q, p_route, q_route)
+
+        for p_node, q_node in zip(p_route, q_route):
+            if p_node != q_node:
+                break
+            lca = p_node
+
+        return lca
