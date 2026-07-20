@@ -12,6 +12,7 @@
 
 
 # Postorder traveler
+# The longest diameter of current node is the sum of the left longest path to the node and the right one
 class Solution:
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         res = 0

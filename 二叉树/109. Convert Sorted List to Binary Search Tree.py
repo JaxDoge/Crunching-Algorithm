@@ -12,7 +12,7 @@
 #         self.left = left
 #         self.right = right
 
-# 快慢指针
+# Fast and slow pointers
 class Solution:
     def sortedListToBST(self, head: ListNode) -> TreeNode:
         # badcase
