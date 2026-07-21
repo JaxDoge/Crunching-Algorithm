@@ -7,17 +7,14 @@ class TreeNode:
 		self.right = right
 
 
-# 递归解法
+# Always maintain the correct upper and lower bounds of current node
 class Solution:
-	def isValidBST(self, root: TreeNode) -> bool:
-		# Find out all invalida situation
-		def helper(root: TreeNode, min: TreeNode, max: TreeNode):
-            if not root: return True
-            # the rule is when go into the right subtree, updating the minium limitation, and vise versa
-            if max and root.val >= max.val:  # the maxium and minium value start from None
-            	return False
-            if min and root.val <= min.val:
-            	return False
-            return helper(root.left,min,root) and helper(root.right,root,max)
-
-        return helper(root,None,None)
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def preorder(node, low, high):
+            if not node:
+                return True
+            if node.val <= low or node.val >= high:
+                return False
+            return preorder(node.left, low, node.val) and preorder(node.right, node.val, high)
+        
+        return preorder(root, float('-inf'), float('inf'))
