@@ -4,7 +4,6 @@
 # 即遍历完一个陆地格子就让陆地「沉没」为海洋。这种方法看似很巧妙，但实际上有很大隐患，
 # 因为这样我们就无法区分「海洋格子」和「已遍历过的陆地格子」了。如果题目更复杂一点，这很容易出 bug。
 
-
 class UF:
 	def __init__(self, number):
 		self.count = number
@@ -35,7 +34,6 @@ class UF:
 		rootP = self.find(p)
 		rootQ = self.find(q)
 		return rootP == rootQ
-
 
 
 class Solution:
