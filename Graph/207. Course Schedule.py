@@ -7,6 +7,7 @@ class Solution:
         # if numCourses == 0: return True
         
         # Build a course graph
+        # List or hashtable
         courseG = []
         for vertex in range(numCourses):
         	courseG.append([])
