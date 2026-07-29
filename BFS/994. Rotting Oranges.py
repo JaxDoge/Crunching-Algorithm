@@ -37,6 +37,7 @@ class Solution:
                         freshOranges -= 1
                         queue.append((newI, newJ))
 
+            # Add time counter only if there are at least one orange rotted
             if queue:
                 minute += 1
 
