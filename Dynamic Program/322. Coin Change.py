@@ -37,7 +37,7 @@ class Solution:
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
     	# 由于有 base case amount=0，所以数组长度是 amount +1
-    	# 由于硬币取值不可能超过 amount 所以 amount + 1 是最小上界
+    	# 由于硬币取值不可能超过 amount 所以 amount + 1 是最小上界, or we can use infinite
     	dp = [amount+1] * (amount+1)
     	# base case
     	dp[0] = 0
