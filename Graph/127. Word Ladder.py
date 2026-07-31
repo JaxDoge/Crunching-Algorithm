@@ -51,22 +51,23 @@ class Solution:
     	# 构造词图
     	for word in wordList:
     		addEdge(word)
-        if beginWord not in edge_dict:
-            addEdge(beginWord)
+
+        addEdge(beginWord)
             
     	# Badcase，endWord 不在词字典中，完全不可能连接，用哈希表判断比原始 list 快
     	if endWord not in wordID:
     		return 0
 
         helper_queue = collections.deque()
-        #路径长度初始化为1,因为 beginWord 必在其中
-    	path = 1
+
+    	path = 0
     	beginID, endID = wordID[beginWord], wordID[endWord]
         helper_queue.append(beginID)
         # visited 避免重复访问
         visited = collections.defaultdict()
 
         while helper_queue:
+            path += 1
         	subsize = len(helper_queue)
         	for _ in range(subsize):
         		popID = helper_queue.popleft()
@@ -77,9 +78,7 @@ class Solution:
         		for next_wordID in edge_dict[popID]:
         			if next_wordID not in visited:
         				helper_queue.append(next_wordID)
-
-        	# 遍历完当前层
-        	path += 1
+        	
         return 0
 
 
