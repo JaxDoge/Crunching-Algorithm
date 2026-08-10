@@ -18,15 +18,14 @@ class Solution:
 # O(1) space complexity
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-    	if not nums:
-    		return 0
-    	length = len(nums)
-    	dp_0 = nums[0]
-    	res = float('-inf')
+        n = len(nums)
 
-    	for index in range(1, length):
-    		dp_1 = max(nums[index], dp_0+nums[index])
-    		res = max(res, dp_1)
-    		dp_0 = dp1
+        dp_0 = nums[0]
+        res = dp_0
 
-    	return res
+        for i in range(1, n):
+            dp_1 = max(nums[i], nums[i] + dp_0)
+            res = max(res, dp_1)
+            dp_0 = dp_1
+
+        return res
