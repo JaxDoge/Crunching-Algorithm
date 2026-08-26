@@ -1,0 +1,17 @@
+1344. Angle Between Hands of a Clock
+
+class Solution:
+	def angleClock(self, hour: int, minutes: int) -> float:
+		# Find the angle of minutes hand from 0
+		min_zero_degree = 360 * (minutes / 60)
+
+		# Find the angle of hour hand
+		one_hour_degree = 360 * (1 / 12)
+		hour_zero_degree = hour * one_hour_degree + one_hour_degree * (minutes / 60)
+
+		diff = abs(min_zero_degree - hour_zero_degree)
+
+		if diff > 180:
+			diff = 360 - diff
+
+		return diff
