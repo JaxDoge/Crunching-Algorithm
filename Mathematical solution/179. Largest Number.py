@@ -4,21 +4,20 @@
 
 
 # Greedy Algorithm
-# Note that sorted take iterable item as the first parameter
-import functools
+# If ab < ba, then ... b a ... should always larger than ... a b ...
 class Solution:
     def largestNumber(self, nums: List[int]) -> str:
         n = len(nums)
-        strNums = map(str, nums)
+        str_nums = map(str, nums)
 
-        def cmp(a, b):
-            if a + b == b + a:
-                return 0
-            elif a + b < b + a:
+        def cmp(a: str, b: str):
+            if a + b > b + a:
                 return -1
-            else:
+            elif a + b < b + a:
                 return 1
-
-        strNums = sorted(strNums, key = functools.cmp_to_key(cmp), reverse = True)
-        # Note that if there are only zeros in nums, the answer could be "00000", and it should be "0"
-        return "".join(strNums) if strNums[0] != "0" else "0"
+            else:
+                return 0
+        
+        from functools import cmp_to_key
+        str_nums = sorted(str_nums, key = cmp_to_key(cmp))
+        return "".join(str_nums) if str_nums[0] != "0" else "0"
