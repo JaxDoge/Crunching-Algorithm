@@ -5,37 +5,29 @@
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
-
-
-
-# 双指针法，空间复杂度 O(1)
 class Solution:
-    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
-        if not head or not head.next: return None 
-        dummy_head = ListNode(val = -1, next = head)
-        first = second = dummy_head 
+	def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+		dummy_head = ListNode()
+		dummy_head.next = head
+		p1 = dummy_head
+		p2 = head
 
-        # move second pointer n-1 step ahead
-        for _ in range(n):
-        	second = second.next 
+		for _ in range(n - 1):
+			p2 = p2.next
 
-        while second.next:
-        	first = first.next 
-        	second = second.next
+		while p2.next:
+			p1 = p1.next
+			p2 = p2.next
 
-        # first point to he predecessor of target node 
+		target = p1.next
+		p1.next = target.next
 
-        delete_node = first.next 
-        first.next = delete_node.next 
-        delete_node.next = None 
-
-        del delete_node
-        return dummy_head.next 
+		return dummy_head.next
 
 
 
 
- 	
+	
 
 
 
