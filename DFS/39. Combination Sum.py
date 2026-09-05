@@ -34,27 +34,30 @@ class Solution:
 
 
 class Solution:
-	def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-		candidates.sort()
-		n = len(candidates)
-		res = []
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        n = len(candidates)
+        res = []
 
-		def backtrack(idx, cur_path, cur_sum):
-			if cur_sum == target:
-				res.append(cur_path[:])
-			
-			if cur_sum > target:
-				return
-			
-			remaining = target - cur_sum
-			end = bisect.bisect(candidates, remaining)
+        def backtrack(idx, cur_path, cur_sum):
+            if cur_sum == target:
+                res.append(cur_path[:])
+            
+            if cur_sum > target:
+                return
+            
+            remaining = target - cur_sum
+            end = bisect.bisect(candidates, remaining)
 
-			for i in range(idx, end):
-				num = candidates[i]
-				cur_sum += num
-				cur_path.append(num)
-				backtrack(i, cur_path, cur_sum)
-				cur_path.pop()
-				cur_sum -= num
+            for i in range(idx, end):
+                num = candidates[i]
+                cur_sum += num
+                cur_path.append(num)
+                backtrack(i, cur_path, cur_sum)
+                cur_path.pop()
+                cur_sum -= num
 
-			return
+            return
+
+        backtrack(0, [], 0)
+        return res
