@@ -1,49 +1,61 @@
+37. Sudoku Solver
+
 class Solution:
-    def solveSudoku(self, board: List[List[str]]) -> None:
-        """
-        Do not return anything, modify board in-place instead.
-        """
-        rows = 9
-        cols = 9
+	def solveSudoku(self, board: List[List[str]]) -> None:
+		"""
+		Do not return anything, modify board in-place instead.
+		"""
 
-        def backtrack(board_, i, j):
-            if j == cols:
-                # enumerate one row
-                return backtrack(board_, i + 1, 0)
+		rows = [set() for _ in range(9)]
+		cols = [set() for _ in range(9)]
+		boxes = [set() for _ in range(9)]
 
-            if i == rows:
-                # base case
-                return True
+		empty = []
 
-            if board_[i][j] != '.':
-                # encounter a preset number
-                return backtrack(board_, i, j + 1)
+		for i in range(9):
+			for j in range(9):
+				val = board[i][j]
+				if val != '.':
+					rows[i].add(val)
+					cols[j].add(val)
+					boxes[(i // 3) * 3 + j // 3].add(val)
+				else:
+					empty.append((i, j))
 
-            # enumerate all possible characters
-            for char in range(1, 10):
-                # validation
-                if not isvalid(board_, i, j, str(char)):
-                    continue
+		def backtrack(idx):
+			if idx == len(empty):
+				return True
 
-                board_[i][j] = str(char)
-                # backtrack and exit condition
-                if backtrack(board_, i, j + 1):
-                    return True
-                board_[i][j] = '.'
+			# current cell
+			r, c = empty[idx]
+			box_id = (r//3)*3 + c//3
 
-            # There is no solution
-            return False
+			for cand in '123456789':
+				if (
+					cand in rows[r] or 
+					cand in cols[c] or 
+					cand in boxes[box_id]
+					):
+					continue
 
-        def isvalid(p_board, row, col, char: str):
-            for i in range(9):
-                if p_board[row][i] == char:
-                    return False
-                if p_board[i][col] == char:
-                    return False
-                # How to iterate a 3x3 sub-square:
-                if p_board[(row // 3) * 3 + i // 3][(col // 3) * 3 + i % 3] == char:
-                    return False
+				# Fill this cell
+				board[r][c] = cand
+				rows[r].add(cand)
+				cols[c].add(cand)
+				boxes[box_id].add(cand)
 
-            return True
+				if backtrack(idx+1):
+					return True
 
-        backtrack(board, 0, 0)
+				# pop out
+				board[r][c] = '.'
+				rows[r].remove(cand)
+				cols[c].remove(cand)
+				boxes[box_id].remove(cand)
+
+			return False
+
+		backtrack(0)			
+
+
+
