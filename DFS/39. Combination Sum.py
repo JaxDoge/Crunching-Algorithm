@@ -3,32 +3,58 @@
 # DFS + pruning
 
 class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+	def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
 
-        def dfs(candidates, begin, size, path, res, target):
-            if target == 0:
-                res.append(path)
-                return
+		def dfs(candidates, begin, size, path, res, target):
+			if target == 0:
+				res.append(path)
+				return
 
-            for index in range(begin, size):
-                residue = target - candidates[index]
-                if residue < 0:
-                    break
+			for index in range(begin, size):
+				residue = target - candidates[index]
+				if residue < 0:
+					break
 
-                # the path + [] will create a new copy, so the original list is untouched. Hence, no backtrack in the end
-                # This question allow repetitive numbers, so the start index is still idx
-                dfs(candidates, index, size, path + [candidates[index]], res, residue)
-            return
+				# the path + [] will create a new copy, so the original list is untouched. Hence, no backtrack in the end
+				# This question allow repetitive numbers, so the start index is still idx
+				dfs(candidates, index, size, path + [candidates[index]], res, residue)
+			return
 
-        size = len(candidates)
-        if size == 0:
-            return []
+		size = len(candidates)
+		if size == 0:
+			return []
 
-        # Sort the candidates so that the pruning could take place before next recursion
-        candidates.sort()
+		# Sort the candidates so that the pruning could take place before next recursion
+		candidates.sort()
 
-        path = []
-        res = []
-        dfs(candidates, 0, size, path, res, target)
-        return res
+		path = []
+		res = []
+		dfs(candidates, 0, size, path, res, target)
+		return res
 
+
+class Solution:
+	def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+		candidates.sort()
+		n = len(candidates)
+		res = []
+
+		def backtrack(idx, cur_path, cur_sum):
+			if cur_sum == target:
+				res.append(cur_path[:])
+			
+			if cur_sum > target:
+				return
+			
+			remaining = target - cur_sum
+			end = bisect.bisect(candidates, remaining)
+
+			for i in range(idx, end):
+				num = candidates[i]
+				cur_sum += num
+				cur_path.append(num)
+				backtrack(i, cur_path, cur_sum)
+				cur_path.pop()
+				cur_sum -= num
+
+			return
