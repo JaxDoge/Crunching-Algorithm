@@ -1,33 +1,28 @@
 47. Permutations II
 
-
-
 class Solution:
-    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
-        n = len(nums)
+	def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+		n = len(nums)
+		res = []
 
-        ans = []
-        path = []
-        memo = set([])
-        self.backtrack(n, nums, memo, path, ans)
+		def backtrack(first):
+			if first == n:
+				res.append(nums.copy())
+				return
 
-        return ans
+			seen = set()
 
-    def backtrack(self, remain_slots, nums, pub_memo, cur_path, res):
-        # base case
-        if remain_slots == 0:
-            return res.append(cur_path.copy())
+			for i in range(first, n):
+				if nums[i] in seen:
+					continue
+					
+				seen.add(nums[i])
+				nums[first], nums[i] = nums[i], nums[first]
+				backtrack(first + 1)
+				nums[first], nums[i] = nums[i], nums[first]
 
-        sub_memo = set([])
 
-        for i in range(len(nums)):
-            # pruning the tree
-            if i in pub_memo or nums[i] in sub_memo:
-                continue
-            cur_path.append(nums[i])
-            pub_memo.add(i)
-            sub_memo.add(nums[i])
-            self.backtrack(remain_slots-1, nums, pub_memo, cur_path, res)
-            pub_memo.remove(i)
-            cur_path.pop()
+		backtrack(0)
+
+		return res
 
