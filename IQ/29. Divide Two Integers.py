@@ -1,6 +1,6 @@
 29. Divide Two Integers
 
-
+# Too verbose
 class Solution:
     def divide(self, dividend: int, divisor: int) -> int:
         INT_MIN, INT_MAX = -2**31, 2**31 - 1
@@ -69,6 +69,82 @@ class Solution:
                 right = mid - 1
 
         return -ans if rev else ans
+
+
+# Doubling and subtraction
+
+class Solution:
+    def divide(self, dividend: int, divisor: int) -> int:
+        INT_MIN = -(1 << 31)
+        INT_MAX = (1 << 31) - 1
+
+        # Special case. Quotient overflow
+        if dividend == INT_MIN and divisor == -1:
+            return INT_MAX
+
+        # Store the quotient sign
+        # Then we can focus on magnitudes
+        negative = (dividend < 0) != (divisor < 0)
+
+        # Keep both operands negative to avoid abs(INT_MIN).
+        # Note INT_MIN has larger magnitudes
+        a = dividend if dividend > 0 else -dividend
+        b = divisor if divisor > 0 else -divisor
+
+        value = b
+        multiple = -1
+        doubling = 0 # the power of multiple
+
+        # Find the largest doubled divisor that fits.
+        # The first condition ensures doubling cannot overflow.
+        while value >= (INT_MIN >> 1) and a >= value + value:
+            value += value
+            multiple += multiple
+            doubling += 1
+
+        # Now we know the largest we can get by doubling the value (smaller than dividend)
+        quotient = 0
+
+        # Subtract a by value. Start from the largest one.
+        # Note we need to check it doubling + 1 times to cover the divisor * 2^0 case
+        for _ in range(doubling + 1):
+            if a >= value:
+                a -= value
+                quotient += multiple
+            value >>= 1
+            multiple >>= 1
+
+        return quotient if negative else -quotient
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
