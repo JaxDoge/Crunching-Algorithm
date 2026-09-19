@@ -4,38 +4,38 @@
 # Backtrack
 # Time limitation exceeded !!
 class Solution:
-    def numDecodings(self, s: str) -> int:
-        n = len(s)
-        validSet = set([str(x) for x in range(1,27)])
-        # curCode = []  # Must constrain to 1 ~ 26
-        res = 0
+	def numDecodings(self, s: str) -> int:
+		n = len(s)
+		validSet = set([str(x) for x in range(1,27)])
+		# curCode = []  # Must constrain to 1 ~ 26
+		res = 0
 
-        def backtrack(idx, curCode, choice):
-            nonlocal n, validSet, res, s
-            if "".join(curCode) not in validSet and idx > 0:
-                return
-            if len(curCode) > 2:
-                return
-            if idx == n:
-                if choice:
-                    res += 1
-                return
+		def backtrack(idx, curCode, choice):
+			nonlocal n, validSet, res, s
+			if "".join(curCode) not in validSet and idx > 0:
+				return
+			if len(curCode) > 2:
+				return
+			if idx == n:
+				if choice:
+					res += 1
+				return
 
 
-            if choice:
-                curCode = []
-            
-            curCode.append(s[idx])
-            # Choice one: add separator 
-            backtrack(idx + 1, curCode, True)
-            # Choice two: no separator
-            backtrack(idx + 1, curCode, False)
-            curCode.pop()
+			if choice:
+				curCode = []
+			
+			curCode.append(s[idx])
+			# Choice one: add separator 
+			backtrack(idx + 1, curCode, True)
+			# Choice two: no separator
+			backtrack(idx + 1, curCode, False)
+			curCode.pop()
 
-            return
+			return
 
-        backtrack(0, [], False)  # True is still OK
-        return res
+		backtrack(0, [], False)  # True is still OK
+		return res
 
 
 
@@ -44,42 +44,49 @@ class Solution:
 # if s[i] is a standalone code, there is dp[i-1] decode ways
 # if s[i] could combine with s[i-1], there is dp[i-2] decode ways
 class Solution:
-    def numDecodings(self, s: str) -> int:
-        n = len(s)
-        validSet = set([str(x) for x in range(1,27)])
-        dp = [0] * n
-        if s[0] in validSet:
-            dp[0] = 1
-        else:
-            return 0
+	def numDecodings(self, s: str) -> int:
+		n = len(s)
+		validSet = set([str(x) for x in range(1,27)])
+		dp = [0] * n
 
-        for i in range(1, n):
-            if i == 1:
-                if "".join(s[:2]) in validSet: 
-                    if s[1] != "0":
-                        dp[i] = 2
-                    else:
-                        dp[i] = 1
-                else:
-                    if s[1] != "0":
-                        dp[i] = 1
-                    else:
-                        dp[i] = 0
-                continue
+		# Base case
+		if s[0] in validSet:
+			dp[0] = 1
+		else:
+			return 0
 
-            if "".join(s[i-1:i+1]) in validSet: 
-                if s[i] != "0":
-                    dp[i] = dp[i-2] + dp[i-1]
-                else:
-                    dp[i] = dp[i-2]
-            else:
-                if s[i] != "0":
-                    dp[i] = dp[i-1]
-                else:
-                    dp[i] = 0
-                    break
+		for i in range(1, n):
+			# Still base case
+			if i == 1:
+				if "".join(s[:2]) in validSet: 
+					# First two digit can combine togather
+					if s[1] != "0":
+						# combine or standalone
+						dp[i] = 2
+					else:
+						# can only combine, like `10`
+						dp[i] = 1
+				else:
+					if s[1] != "0":
+						# First two have to be standalone, like `45`
+						dp[i] = 1
+					else:
+						# bad case, like `50d`
+						return 0
+				continue
 
-        return dp[n-1]
+			if "".join(s[i-1:i+1]) in validSet: 
+				if s[i] != "0":
+					dp[i] = dp[i-2] + dp[i-1]
+				else:
+					dp[i] = dp[i-2]
+			else:
+				if s[i] != "0":
+					dp[i] = dp[i-1]
+				else:
+					return 0
+
+		return dp[n-1]
 
 
 
