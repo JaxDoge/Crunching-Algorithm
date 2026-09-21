@@ -3,48 +3,40 @@
 
 # Backtrack
 class Solution:
-    def restoreIpAddresses(self, s: str) -> List[str]:
-        n = len(s)
-        res = []
-        if n < 4:
-            return res
-        # curPath = []  # 0 ~ 255
-        # curIP = []  # length == 4
+	def restoreIpAddresses(self, s: str) -> list[str]:
+		n = len(s)
+		res = []
 
-        def backtrack(idx, choice, curPath, curIP):
-            nonlocal n, res
-            curNum = "".join(curPath)
-            if not self.isValid(curNum) and idx > 0:
-                return
-            if choice:
-                # add the number to curIP
-                curIP.append(curNum)
-                curPath.clear()
-                if len(curIP) == 4 and idx != n: # invalid IP length
-                    return
-            if idx == n:
-                if choice and len(curIP) == 4:  # the ending period
-                    res.append(".".join(curIP))
-                return
+		def backtrack(start, parts):
+			remaining_chars = n - start
+			remaining_parts = 4 - len(parts)
 
-            curPath.append(s[idx])
-            backtrack(idx + 1, True, curPath[:], curIP[:])
-            backtrack(idx + 1, False, curPath[:], curIP[:])
+			# Each remaining part need 1~3 digits
+			if not remaining_parts <= remaining_chars <= remaining_parts * 3:
+				return
 
-            return
+			# If no more part needed, no more character left
+			# We find one solution
+			if remaining_parts == 0:
+				res.append('.'.join(parts))
+				return
 
-        backtrack(0, False, [], [])
-        return res
+			for length in range(1, 4):
+				end = start + length
 
+				if end > n:
+					break
 
+				cand_part = s[start:end]
+				if length > 1 and s[start] == '0':
+					break
+				
+				if int(cand_part) > 255:
+					break
+				
+				parts.append(cand_part)
+				backtrack(end, parts)
+				parts.pop()
 
-    def isValid(self, s):
-        if len(s) == 0:
-            return True
-        if len(s) > 1 and s[0] == "0":
-            return False
-        if int(s) < 0:
-            return False
-        if int(s) > 255:
-            return False
-        return True
+		backtrack(0, [])
+		return res

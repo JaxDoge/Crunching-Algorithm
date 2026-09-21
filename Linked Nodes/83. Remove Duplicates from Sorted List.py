@@ -9,7 +9,7 @@
 
 
 class Solution:
-    def deleteDuplicates(self, head: ListNode) -> ListNode:
+	def deleteDuplicates(self, head: ListNode) -> ListNode:
 		if not head or not head.next:
 			return head 
 
@@ -25,3 +25,20 @@ class Solution:
 				q = p
 
 		return head     	
+
+
+class Solution:
+	def deleteDuplicates(self, head: ListNode | None) -> ListNode | None:
+		if not head or not head.next:
+			return head
+
+		p1 = p2 = head
+
+		while p2:
+			while p2.next and p2.val == p2.next.val:
+				p2 = p2.next
+			p2 = p2.next
+			p1.next = p2
+			p1 = p2
+
+		return head
