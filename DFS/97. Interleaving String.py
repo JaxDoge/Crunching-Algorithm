@@ -3,34 +3,37 @@
 
 # DFS
 class Solution:
-    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
-        m, n = len(s1), len(s2)
-        if m + n != len(s3):
-            return False
+	def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+		m = len(s1)
+		n = len(s2)
+		l = len(s3)
+		if m + n != l:
+			return False
 
-        # notice when the recursion end, i and j are m and n
-        memo = [[-1] * (n + 1) for _ in range(m + 1)]
+		# Note the memo need to cover the memo[m][j] or memo[i][n] cases
+		memo = [[-1] * (n + 1) for _ in range(m + 1)]
 
-        def dfs(i, j):
-            nonlocal s1, s2, s3, memo
-            if i + j == len(s3):
-                return True
+		def dfs(i, j):
+			if i + j == l:
+				return True
+			
+			if memo[i][j] > -1:
+				return memo[i][j]
 
-            if memo[i][j] > -1:
-                return True if memo[i][j] == 1 else False
+			res = 0
+			if i < m and s1[i] == s3[i + j]:
+				res = dfs(i + 1, j)
+			
+			# Note that we only need to fine one solution to return
+			if res:
+				return res
 
-            res = False
-            # If s1[i] exists and equal to s3[i+j], match them
-            if i < m and s1[i] == s3[i + j]:
-                res = dfs(i + 1, j)
+			# If the first path doesn't work, then res must be 0 (no change)
+			if j < n and s2[j] == s3[i + j]:
+				res = dfs(i, j + 1)
 
-            # If s2[j] exists and equal to s3[i+j], match them
-            # the final res is True if either return true
-            if j < n and s2[j] == s3[i + j]:
-                res = res or dfs(i, j + 1)
+			memo[i][j] = res
 
-            memo[i][j] = res
-
-            return res
-
-        return dfs(0, 0)
+			return res
+		
+		return dfs(0, 0) == 1
