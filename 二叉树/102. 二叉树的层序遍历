@@ -37,55 +37,51 @@
 #     	return res
 
 class Solution:
-    def levelOrder(self, root: TreeNode) -> List[List[int]]:
-    	# from collections import deque
-    	from queue import Queue   # Queue class in python
-    	node = root
-    	res = []
-    	helper = Queue()
+	def levelOrder(self, root: TreeNode | None) -> list[list[int]]:
+		if not root:
+			return []
 
-    	if node:
-    		helper.put(node)      # Add root node into queue
-       
-        #  pop out the first q_size elements, add the corresponding values into temp list, add child nodes inside helper sequently
-    	while not helper.empty():   
+		queue = deque()
+		queue.append(root)
+		res = []
 
-    		q_size = helper.qsize()
-    		level_list = []   #  Store the values of outcasts
+		while queue:
+			cur_level_size = len(queue)
+			sub_res = []
+			for i in range(cur_level_size):
+				node = queue.popleft()
+				sub_res.append(node.val)
+				if node.left:
+					queue.append(node.left)
+				if node.right:
+					queue.append(node.right)
+			res.append(sub_res)
 
-    		for i in range(q_size):  # Deal with first q_size elements -- the 'roots'		    
-    		    ele = helper.get()    # Pop out the element
-    		    level_list.append(ele.val)
-    		    if ele.left:
-    		    	helper.put(ele.left)
-    		    if ele.right:
-    		    	helper.put(ele.right)
-    		res.append(level_list)      # 
-    	return res
+		return res
 
 
 
 # 递归解法
 
 class Solution:
-    def levelOrder(self, root: TreeNode) -> List[List[int]]:
-    	node = root
-    	res = []
+	def levelOrder(self, root: TreeNode) -> List[List[int]]:
+		node = root
+		res = []
 
-    	def iterator(node_p, level):
-    		if len(res) == level:   # level is the index, so it come from zero; Add new sub-list in terms of level
-    			res.append([])
+		def iterator(node_p, level):
+			if len(res) == level:   # level is the index, so it starts from zero; Add a new sub-list depends on level
+				res.append([])
 
-    		res[level].append(node_p.val)
+			res[level].append(node_p.val)
 
-    		if node_p.left:
-    			iterator(node_p.left, level+1)
-    		if node_p.right:
-    			iterator(node_p.right, level+1)
+			if node_p.left:
+				iterator(node_p.left, level+1)
+			if node_p.right:
+				iterator(node_p.right, level+1)
 
-    	if not node:
-    		return res
+		if not node:
+			return res
 
-    	iterator(node, level = 0)
-    	return res
+		iterator(node, level = 0)
+		return res
 
