@@ -11,6 +11,7 @@
 #         self.right = right
 
 # 层序遍历
+# Keep the nodes in the queue left-to-right order
 class Solution:
 	def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
 		if not root: return []
