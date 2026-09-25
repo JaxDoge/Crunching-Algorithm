@@ -8,56 +8,58 @@
 #         self.right = right
 
 # # 递归解法
-# class Solution:
-#     def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
-#     	# 构造 HASH TABLE 用来在中序遍历列表中寻址，这样每层递归不需要做一次 O(n) 的循环定位根节点位置了
-#         inorder_index = {element: i for i, element in enumerate(inorder)}
-# 	    def builder(preorder: List[int], pre_start: int, pre_end: int
-# 	    	, inorder: List[int], in_start: int, in_end: int):
-# 	        # Some bad cases
-# 	        if pre_start > pre_end:
-# 	        	return None
+# Use preorder to find the root. Then use the root.val to find the left and right subtree range.
+class Solution:
+	def buildTree(self, preorder: list[int], inorder: list[int]) -> TreeNode | None:
+		preorder_idx = 0
+		inorder_idx_map = {}
+		for idx, val in enumerate(inorder):
+			inorder_idx_map[val] = idx
 
-# 	        # root value is the first element of preorder
-# 	        root = TreeNode(val = preorder[pre_start])
-# 	        root_in_index = inorder_index[preorder[pre_start]]
+		def array_to_tree(left, right):
+			nonlocal preorder_idx
 
-# 	        left_tree_size = root_in_index - in_start
-# 	        # recursion begin!
-# 	        root.left = builder(preorder, pre_start+1, pre_start+left_tree_size
-# 	        	, inorder, in_start, root_in_index-1)
-# 	        root.right = builder(preorder, pre_start+left_tree_size+1,pre_end
-# 	        	, inorder, root_in_index+1, in_end)
+			# base case, invalid inorder range
+			if left > right:
+				return None
+			
 
-# 	        return root
+			root_val = preorder[preorder_idx]
+			root = TreeNode(root_val)
+			# Note that when preorder_idx out bound, the inorder range is already invalid (return None)
+			preorder_idx += 1
 
-#         return builder(preorder,0,len(preorder)-1,inorder,0,len(inorder)-1)
+			root.left = array_to_tree(left, inorder_idx_map[root_val] - 1)
+			root.right = array_to_tree(inorder_idx_map[root_val] + 1, right)
+			return root
+		
+		return array_to_tree(0, len(inorder) - 1)
 
 
 
 # 迭代解法
 class Solution:
-    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
-        if not preorder:
-            return None
+	def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+		if not preorder:
+			return None
 
-        root = TreeNode(preorder[0])
-        stack = [root]
-        inorderIndex = 0
-        for i in range(1, len(preorder)):
-            preorderVal = preorder[i]
-            node = stack[-1]
-            if node.val != inorder[inorderIndex]:
-                node.left = TreeNode(preorderVal)
-                stack.append(node.left)
-            else:
-                while stack and stack[-1].val == inorder[inorderIndex]:
-                    node = stack.pop()
-                    inorderIndex += 1
-                node.right = TreeNode(preorderVal)
-                stack.append(node.right)
+		root = TreeNode(preorder[0])
+		stack = [root]
+		inorderIndex = 0
+		for i in range(1, len(preorder)):
+			preorderVal = preorder[i]
+			node = stack[-1]
+			if node.val != inorder[inorderIndex]:
+				node.left = TreeNode(preorderVal)
+				stack.append(node.left)
+			else:
+				while stack and stack[-1].val == inorder[inorderIndex]:
+					node = stack.pop()
+					inorderIndex += 1
+				node.right = TreeNode(preorderVal)
+				stack.append(node.right)
 
-        return root
+		return root
 
 
 

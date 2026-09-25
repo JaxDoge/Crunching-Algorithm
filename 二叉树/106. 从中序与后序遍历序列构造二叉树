@@ -9,26 +9,51 @@
 
 
 class Solution:
-    def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
-    	inorder_hash_table = {value: i for i, value in enumerate(inorder)}
-    	
-    	def build(postorder: List[int], post_start: int, post_end: int
-    		, inorder: List[int], in_start: int, in_end: int):
-    	    
-    	    if post_end<post_start:
-    	    	return None
-    	    
-    	    root = TreeNode(val = postorder[post_end])
-    	    inorder_root_index = inorder_hash_table[postorder[post_end]]
+	def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
+		inorder_hash_table = {value: i for i, value in enumerate(inorder)}
+		
+		def build(postorder: List[int], post_start: int, post_end: int
+			, inorder: List[int], in_start: int, in_end: int):
+			
+			if post_end<post_start:
+				return None
+			
+			root = TreeNode(val = postorder[post_end])
+			inorder_root_index = inorder_hash_table[postorder[post_end]]
 
-    	    left_tree_size = inorder_root_index - in_start
-    	    root.left = build(postorder, post_start, post_start+left_tree_size-1
-    	    	, inorder, in_start, inorder_root_index-1)
-    	    root.right = build(postorder, post_start+left_tree_size, post_end-1
-    	    	, inorder, inorder_root_index+1, in_end)
-    	    return root
-    	return build(postorder,0,len(postorder)-1,inorder,0,len(inorder)-1)
+			left_tree_size = inorder_root_index - in_start
+			root.left = build(postorder, post_start, post_start+left_tree_size-1
+				, inorder, in_start, inorder_root_index-1)
+			root.right = build(postorder, post_start+left_tree_size, post_end-1
+				, inorder, inorder_root_index+1, in_end)
+			return root
+		return build(postorder,0,len(postorder)-1,inorder,0,len(inorder)-1)
 
 
 
-    	
+class Solution:
+	def buildTree(self, inorder: list[int], postorder: list[int]) -> TreeNode | None:
+		postorder_idx = len(postorder) - 1
+		inorder_idx_map = {}
+		for idx, val in enumerate(inorder):
+			inorder_idx_map[val] = idx
+
+		def array_to_tree(left, right):
+			nonlocal postorder_idx
+
+			# base case, invalid inorder range
+			if left > right:
+				return None
+			
+
+			root_val = postorder[postorder_idx]
+			root = TreeNode(root_val)
+
+			postorder_idx -= 1
+
+			root.right = array_to_tree(inorder_idx_map[root_val] + 1, right)
+			root.left = array_to_tree(left, inorder_idx_map[root_val] - 1)
+			
+			return root
+		
+		return array_to_tree(0, len(inorder) - 1)        

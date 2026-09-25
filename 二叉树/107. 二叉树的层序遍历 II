@@ -9,26 +9,23 @@
 
 
 class Solution:
-    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
-        from collections import deque
-        node = root
-        res = []
-        helper = deque()
-        if node:
-            helper.append(node)
+	def levelOrderBottom(self, root: TreeNode | None) -> list[list[int]]:
+		if not root: return []
+		res_helper = deque()
+		queue = deque([root])
 
-        while helper:
-            sub_level_list = []
-            for i in range(len(helper)):
-                ele = helper.popleft()
-                sub_level_list.append(ele.val)
-                if ele.left:
-                    helper.append(ele.left)
-                if ele.right:
-                    helper.append(ele.right)
-            res.append(sub_level_list)
-        res.reverse()
-        return res
+		while queue:
+			sub_res = []
+			for _ in range(len(queue)):
+				node = queue.popleft()
+				sub_res.append(node.val)
+				if node.left:
+					queue.append(node.left)
+				if node.right:
+					queue.append(node.right)
 
+			res_helper.appendleft(sub_res)
+		
+		return list(res_helper)
 
 
