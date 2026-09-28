@@ -9,12 +9,12 @@
 
 
 class Solution:
-    def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
+	def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
 
-    	def preorderTraver(node, target):
-	    	if not node: return False
-    		target = target - node.val
-    		if target == 0 and not node.left and not node.right:
-    			return True
-            return preorderTraver(node.left, target) or preorderTraver(node.right, target)
-        return preorderTraver(root, targetSum)
+		def preorderTraver(node, target):
+			if not node: return False
+			target = target - node.val
+			if target == 0 and not node.left and not node.right:
+				return True
+			return preorderTraver(node.left, target) or preorderTraver(node.right, target)
+		return preorderTraver(root, targetSum)

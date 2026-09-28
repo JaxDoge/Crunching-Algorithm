@@ -1,4 +1,4 @@
-114. 二叉树展开为链表
+114. Flatten Binary Tree to Linked List
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -59,3 +59,27 @@ class Solution:
                 node = node.right
 
 
+class Solution:
+    def flatten(self, root: TreeNode | None) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        
+        def preorder(node):
+            if not node:
+                return None
+
+            if not node.left and not node.right:
+                return node
+            
+            flat_left_end = preorder(node.left)
+            flat_right_end = preorder(node.right)
+
+            if flat_left_end:
+                flat_left_end.right = node.right
+                node.right = node.left
+                node.left = None
+
+            return flat_right_end if flat_right_end else flat_left_end
+
+        preorder(root)

@@ -9,20 +9,21 @@
 
 
 class Solution:
-    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
-    	paths_list = []
-    	def preorderTraver(node, target, single_path = []):
-    		nonlocal paths_list
-    		if not node: return   # Do nothing
-    		
-    		# single_path.append(node.val)   #  这种写法不对，single_path 变量在递归过程中一直被修改，但理论上发现一个路径以后，该变量应该要置为空list
-    		target -= node.val
-            if target == 0 and not node.left and not node.right:
-            	paths_list.append(single_path + [node.val])  # 这种写法生成了新变量，原有传入的 single_path 参数没有变化
-            	return
-            preorderTraver(node.left, target, single_path + [node.val])
-            preorderTraver(node.right, target, single_path + [node.val])
-            return
+	def pathSum(self, root: TreeNode | None, targetSum: int) -> list[list[int]]:
+		if not root:
+			return []
 
-        preorderTraver(root, targetSum)
-        return paths_list
+		res = []
+
+		def preorderTraver(node, target, path):
+			if not node: return
+			path.append(node.val)
+			target = target - node.val
+			if target == 0 and not node.left and not node.right:
+				res.append(path[:])
+			preorderTraver(node.left, target, path)
+			preorderTraver(node.right, target, path)
+			path.pop()
+			return
+		preorderTraver(root, targetSum, [])    
+		return res  
