@@ -9,97 +9,90 @@
 #         self.val = val
 #         self.next = next
 
-# 归并排序 - 递归
+
+
+
+
 class Solution:
-	def sortList(self, head: ListNode) -> ListNode:
-
-
-
-
-
-# 归并排序 - 迭代
-class Solution:
-	def sortList(self, head: ListNode) -> ListNode:
-		def mergeTwoSortedLN(l1: ListNode, l2: ListNode):
-			if not l1: return l2 
-			if not l2: return l1 
-			dummy_head = ListNode(val = 0)
-			frog = dummy_head
+	def sortList(self, head: ListNode | None) -> ListNode | None:
+		def merge_two_sorted_ln(l1: ListNode | None, l2: ListNode | None) -> ListNode | None:
+			if not l1: return l2
+			if not l2: return l1
+			dummy_head = ListNode(-1)
+			needle = dummy_head
 			while l1 and l2:
-				# frog's next point to the smaller node and then frog jump to it 
 				if l1.val <= l2.val:
-					frog.next = l1
+					needle.next = l1
 					l1 = l1.next
-					frog = frog.next
+					needle = needle.next
 				else:
-					frog.next = l2
-					l2 = l2.next 
-					frog = frog.next 
-
+					needle.next = l2
+					l2 = l2.next
+					needle = needle.next
+			
 			if l1:
-				frog.next = l1
-			else:
-				frog.next = l2
-			return dummy_head.next    	
+				needle.next = l1
+			if l2:
+				needle.next = l2
+			
+			return dummy_head.next
 
-		if not head or not head.next: return head
-
-		hair_node = ListNode(val = 0, next = head)
+		if not head or not head.next:
+			return head
+		
+		dummy_head = ListNode(-1, next = head)
 		list_size = 0
-		sublist_size = 1
+		sub_size = 1
 		cur = head
 
-		# Count the list length
 		while cur:
 			list_size += 1
 			cur = cur.next
-
-		# End loop if the sublist size is equal or larger than the list size, because the final merge is finished 
-		while sublist_size < list_size:
-			pre_node = hair_node
+		
+		while sub_size < list_size:
+			# pre_node point to the last sorted node in this round
+			pre_node = dummy_head
 			cur = pre_node.next
-			# Scan the whole linked nodes with auxiliary pointer cur during each sublist size level
+
 			while cur:
-				# find the h1 position, which is the cur obviously
+				# We need to isolate two sorted linked list
 				h1 = cur
 				h2 = None
-				# find the end of h1 list
 
-				# Don't change the value of sublist_size !! Use while carefully!!
-				step = sublist_size-1
-				while step and cur:  # cur is not point out
+				# find the end of h1
+				for _ in range(sub_size - 1):
+					if not cur: break
 					cur = cur.next
-					step -= 1
-				# got the h2 position, if cur does not point to None
-				# break the link between cur and h2
+				
 				if cur:
 					h2 = cur.next
+					# disconnect to the rest node
 					cur.next = None
 					cur = h2
-				# find the end node of h2, if h2 does not point to None
-				step = sublist_size-1
-				while h2 and cur and step:
-					cur = cur.next
-					step -= 1
-
-				# get the start node of the rest nodes, if they exist
-				# break the link between cur and succ_node, if succ_node exist
+				
+				# find the end of h2
+				if h2:
+					for _ in range(sub_size - 1):
+						if not cur: break
+						cur = cur.next
+				
+				# The start node of next iteration
 				succ_node = None
 				if cur:
 					succ_node = cur.next
 					cur.next = None
 					cur = succ_node
 
+				# Merge two sorted list
+				pre_node.next = merge_two_sorted_ln(h1, h2)
 
-				# merge h1 and h2, pre node point to the result
-				pre_node.next = mergeTwoSortedLN(h1,h2)
-				# move pre to the end of sub list, ready for next turn 
+				# pre_node always point to the last sorted node in this round
 				while pre_node.next:
 					pre_node = pre_node.next
 
-				# double the sublist size
-			sublist_size <<= 1
-		return hair_node.next
+			sub_size *= 2
+		
+		return dummy_head.next
 
 
 
